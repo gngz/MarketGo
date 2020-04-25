@@ -1,3 +1,3 @@
 class Config {
-  static const String BASE_URL = "http://localhost:3333";
+  static const String BASE_URL = "http://10.0.2.2:3333";
 }

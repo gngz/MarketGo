@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/Auth.dart';
 
 class LoginView extends StatefulWidget {
   @override
@@ -31,7 +32,7 @@ class _LoginViewState extends State<LoginView> {
   final loginButton = FlatButton(
       color: secondary,
       child: Text("Login"),
-      onPressed: () => {},
+      onPressed: () => {Auth.authenticate("goncalo@mau.pt", "fosgasse23")},
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)));
 
   // Register Button
@@ -39,7 +40,7 @@ class _LoginViewState extends State<LoginView> {
   final registerButton = FlatButton(
     textColor: secondary,
     child: Text("Register"),
-    onPressed: () => {},
+    onPressed: () => {print("Hello hello")},
   );
 
   // Google Button
