@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:marketgo/components/FacebookButton.dart';
+import 'package:marketgo/components/GoogleButton.dart';
 import '../services/Auth.dart';
 
 class LoginView extends StatefulWidget {
@@ -9,31 +11,47 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   final logo = Image.asset("assets/logo.png");
 
+  String email;
+  String password;
+
+  void authenticate() {
+    //print("Email: $email ; Password: $password");
+    Auth.authenticate(this.email, this.password);
+  }
+
   static const secondary = const Color(0xff0088B4);
 
+  // @Manel what is this?
   static final underlineTextField =
       UnderlineInputBorder(borderSide: BorderSide(color: secondary));
 
   // Email Field
-  final emailField = TextField(
-    obscureText: false,
-    decoration: InputDecoration(labelText: "E-mail", focusColor: secondary),
-  );
-
+  Widget emailField() {
+    return TextField(
+      obscureText: false,
+      decoration: InputDecoration(labelText: "E-mail", focusColor: secondary),
+      onChanged: (text) => this.email = text,
+    );
+  }
   // Password Field
 
-  final passwordField = TextField(
-    obscureText: true,
-    decoration: InputDecoration(labelText: "Password"),
-  );
+  Widget passwordField() {
+    return TextField(
+      obscureText: true,
+      decoration: InputDecoration(labelText: "Password"),
+      onChanged: (text) => {this.password = text},
+    );
+  }
 
   // Login Button
 
-  final loginButton = FlatButton(
-      color: secondary,
-      child: Text("Login"),
-      onPressed: () => {Auth.authenticate("goncalo@mau.pt", "fosgasse23")},
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)));
+  Widget loginButton() {
+    return FlatButton(
+        color: secondary,
+        child: Text("Login"),
+        onPressed: authenticate,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)));
+  }
 
   // Register Button
 
@@ -42,60 +60,6 @@ class _LoginViewState extends State<LoginView> {
     child: Text("Register"),
     onPressed: () => {print("Hello hello")},
   );
-
-  // Google Button
-
-  final googleButton = Container(
-      //padding: EdgeInsets.symmetric(vertical: 20.0),
-      decoration: BoxDecoration(boxShadow: [
-        BoxShadow(
-            color: Colors.black.withOpacity(0.15),
-            spreadRadius: -4.0,
-            blurRadius: 4.0,
-            offset: Offset(1.0, 4.0))
-      ]),
-      child: FlatButton(
-        textColor: Color(0xFF575657),
-        color: Color(0xFFF8F7F7),
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Image(image: AssetImage("assets/google_logo.png"), height: 15.0),
-            Padding(
-              padding: const EdgeInsets.only(left: 10.0),
-              child: Center(child: Text("Login com Google")),
-            ),
-          ],
-        ),
-        onPressed: () => {},
-      ));
-
-  final facebookButton = Container(
-      //padding: EdgeInsets.symmetric(vertical: 20.0),
-      decoration: BoxDecoration(boxShadow: [
-        BoxShadow(
-            color: Colors.black.withOpacity(0.15),
-            spreadRadius: -4.0,
-            blurRadius: 4.0,
-            offset: Offset(1.0, 4.0))
-      ]),
-      child: FlatButton(
-        textColor: Colors.white,
-        color: Color(0xFF45639E),
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Image(image: AssetImage("assets/facebook_logo.png"), height: 15.0),
-            Padding(
-              padding: const EdgeInsets.only(left: 10.0),
-              child: Center(child: Text("Login com Facebook")),
-            ),
-          ],
-        ),
-        onPressed: () => {},
-      ));
 
   @override
   Widget build(BuildContext context) {
@@ -118,16 +82,19 @@ class _LoginViewState extends State<LoginView> {
                   children: <Widget>[
                     Center(child: logo),
                     SizedBox(height: 60.0),
-                    emailField,
+                    emailField(),
                     SizedBox(height: 20.0),
-                    passwordField,
+                    passwordField(),
                     SizedBox(height: 8.0),
                     ButtonBar(
-                      children: <Widget>[registerButton, loginButton],
+                      children: <Widget>[registerButton, loginButton()],
                     ),
                     SizedBox(height: 8.0),
                     Column(
-                      children: <Widget>[googleButton, facebookButton],
+                      children: <Widget>[
+                        GoogleButton(onPressed: () => {}),
+                        FacebookButton(onPressed: () => {}),
+                      ],
                     )
                   ],
                 ),
