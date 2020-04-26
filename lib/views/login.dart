@@ -96,15 +96,13 @@ class _LoginViewState extends State<LoginView> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 Column(
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
-                    Center(child: logo),
-                    SizedBox(height: 60.0),
-                    SizedBox(height: 8.0),
+                    SizedBox(height: 100.0),
+                    Hero(tag: "logo", child: Center(child: logo)),
+                    SizedBox(height: 50.0),
                     Form(
                       key: _formKey,
                       child: Column(
