@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:marketgo/models/Register.dart';
+import 'package:marketgo/services/Auth.dart';
 
 class RegisterView extends StatefulWidget {
   @override
@@ -122,7 +124,14 @@ class _RegisterViewState extends State<RegisterView> {
 
   void _registerHandler() {
     if (_formKey.currentState.validate()) {
-      // Register Backend Logic
+      var registerDTO = new Register();
+
+      registerDTO.firstName = _firstName;
+      registerDTO.lastName = _lastName;
+      registerDTO.email = _email;
+      registerDTO.password = _password;
+
+      Auth.register(registerDTO);
     }
   }
 

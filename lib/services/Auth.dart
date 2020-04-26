@@ -1,9 +1,11 @@
 import "package:dio/dio.dart";
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:marketgo/models/Register.dart';
 import '../config.dart';
 
 class Auth {
   static final storage = new FlutterSecureStorage();
+
   static void authenticate(String email, String password) async {
     try {
       var response = await Dio().post(Config.BASE_URL + "/login",
@@ -14,5 +16,12 @@ class Auth {
     } catch (e) {
       print(e);
     }
+  }
+
+  static void register(Register registerDto) async {
+    try {
+      var response = await Dio()
+          .post("${Config.BASE_URL}/register", data: registerDto.toJson());
+    } catch (e) {}
   }
 }
