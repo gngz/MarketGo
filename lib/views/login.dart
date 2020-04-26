@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:marketgo/components/FacebookButton.dart';
 import 'package:marketgo/components/GoogleButton.dart';
+import 'package:email_validator/email_validator.dart';
 import '../services/Auth.dart';
 
 class LoginView extends StatefulWidget {
@@ -10,13 +11,18 @@ class LoginView extends StatefulWidget {
 
 class _LoginViewState extends State<LoginView> {
   final logo = Image.asset("assets/logo.png");
+  final _formKey = GlobalKey<FormState>();
 
   String email;
   String password;
 
-  void authenticate() {
-    //print("Email: $email ; Password: $password");
-    Auth.authenticate(this.email, this.password);
+  void loginHandler() {
+    if (_formKey.currentState.validate()) {
+      print("Email: $email ; Password: $password");
+      try {
+        Auth.authenticate(this.email, this.password);
+      } catch (e) {}
+    }
   }
 
   static const secondary = const Color(0xff0088B4);
@@ -27,19 +33,29 @@ class _LoginViewState extends State<LoginView> {
 
   // Email Field
   Widget emailField() {
-    return TextField(
+    return TextFormField(
       obscureText: false,
       decoration: InputDecoration(labelText: "E-mail", focusColor: secondary),
-      onChanged: (text) => this.email = text,
+      onChanged: (value) => this.email = value,
+      validator: (value) {
+        if (value.isEmpty) return "Deverá inserir um email";
+        if (!EmailValidator.validate(value)) return "E-mail com formato errado";
+        return null;
+      },
     );
   }
   // Password Field
 
   Widget passwordField() {
-    return TextField(
+    return TextFormField(
       obscureText: true,
       decoration: InputDecoration(labelText: "Password"),
-      onChanged: (text) => {this.password = text},
+      onChanged: (value) => {this.password = value},
+      validator: (value) {
+        if (value.isEmpty) return "Deverá inserir uma password";
+
+        return null;
+      },
     );
   }
 
@@ -49,7 +65,7 @@ class _LoginViewState extends State<LoginView> {
     return FlatButton(
         color: secondary,
         child: Text("Login"),
-        onPressed: authenticate,
+        onPressed: loginHandler,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)));
   }
 
@@ -82,10 +98,17 @@ class _LoginViewState extends State<LoginView> {
                   children: <Widget>[
                     Center(child: logo),
                     SizedBox(height: 60.0),
-                    emailField(),
-                    SizedBox(height: 20.0),
-                    passwordField(),
                     SizedBox(height: 8.0),
+                    Form(
+                      key: _formKey,
+                      child: Column(
+                        children: <Widget>[
+                          emailField(),
+                          SizedBox(height: 20.0),
+                          passwordField()
+                        ],
+                      ),
+                    ),
                     ButtonBar(
                       children: <Widget>[registerButton, loginButton()],
                     ),
