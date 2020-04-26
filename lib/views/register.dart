@@ -130,33 +130,43 @@ class _RegisterViewState extends State<RegisterView> {
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Column(
-            children: <Widget>[
-              SizedBox(height: 100.0),
-              Hero(tag: "logo", child: Center(child: logo)),
-              SizedBox(height: 50.0),
-              Form(
-                  key: _formKey,
-                  child: Column(
-                    children: <Widget>[
-                      _firstNameField(),
-                      SizedBox(height: 8.0),
-                      _lastNameField(),
-                      SizedBox(height: 8.0),
-                      _emailField(),
-                      SizedBox(height: 8.0),
-                      _passwordField(),
-                      SizedBox(height: 8.0),
-                      _confirmPasswordField(),
-                      SizedBox(height: 8.0),
-                      ButtonBar(
-                        children: <Widget>[_goBackButton(), _registerButton()],
-                      )
-                    ],
-                  )),
-            ],
+        body: Container(
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage("assets/wave.png"),
+                  fit: BoxFit.fitWidth,
+                  alignment: Alignment.bottomCenter)),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Column(
+              children: <Widget>[
+                SizedBox(height: 100.0),
+                Hero(tag: "logo", child: Center(child: logo)),
+                SizedBox(height: 50.0),
+                Form(
+                    key: _formKey,
+                    child: Column(
+                      children: <Widget>[
+                        _firstNameField(),
+                        SizedBox(height: 8.0),
+                        _lastNameField(),
+                        SizedBox(height: 8.0),
+                        _emailField(),
+                        SizedBox(height: 8.0),
+                        _passwordField(),
+                        SizedBox(height: 8.0),
+                        _confirmPasswordField(),
+                        SizedBox(height: 8.0),
+                        ButtonBar(
+                          children: <Widget>[
+                            _goBackButton(),
+                            _registerButton()
+                          ],
+                        )
+                      ],
+                    )),
+              ],
+            ),
           ),
         ));
   }
