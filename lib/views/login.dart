@@ -68,7 +68,10 @@ class _LoginViewState extends State<LoginView> {
   Widget loginButton() {
     return FlatButton(
         color: secondary,
-        child: Text("Login"),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          child: Text("Login"),
+        ),
         onPressed: loginHandler,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)));
   }
