@@ -15,7 +15,7 @@ class _RegisterViewState extends State<RegisterView> {
 
   String _firstName, _lastName;
   String _email;
-  String _password, _confirmPassword;
+  String _password;
 
   Widget _firstNameField() {
     String fieldName = "Primeiro Nome";
@@ -74,9 +74,6 @@ class _RegisterViewState extends State<RegisterView> {
       obscureText: true,
       decoration: InputDecoration(labelText: fieldName),
       validator: (value) => _confirmPasswordValidator(value),
-      onChanged: (value) {
-        _confirmPassword = value;
-      },
     );
   }
 
