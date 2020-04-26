@@ -25,6 +25,10 @@ class _LoginViewState extends State<LoginView> {
     }
   }
 
+  void registerHandler() {
+    Navigator.pushNamed(context, "/register");
+  }
+
   static const secondary = const Color(0xff0088B4);
 
   // @Manel what is this?
@@ -71,11 +75,13 @@ class _LoginViewState extends State<LoginView> {
 
   // Register Button
 
-  final registerButton = FlatButton(
-    textColor: secondary,
-    child: Text("Register"),
-    onPressed: () => {print("Hello hello")},
-  );
+  Widget registerButton() {
+    return FlatButton(
+      textColor: secondary,
+      child: Text("Register"),
+      onPressed: registerHandler,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +116,7 @@ class _LoginViewState extends State<LoginView> {
                       ),
                     ),
                     ButtonBar(
-                      children: <Widget>[registerButton, loginButton()],
+                      children: <Widget>[registerButton(), loginButton()],
                     ),
                     SizedBox(height: 8.0),
                     Column(
