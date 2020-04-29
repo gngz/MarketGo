@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
-import 'package:marketgo/models/Register.dart';
+import 'package:marketgo/models/RegisterRequest.dart';
 import 'package:marketgo/services/Auth.dart';
+import 'package:marketgo/services/Exceptions.dart';
 
 class RegisterView extends StatefulWidget {
   @override
@@ -12,6 +13,7 @@ class _RegisterViewState extends State<RegisterView> {
   final logo = Image.asset("assets/logo.png");
   static const secondary = const Color(0xff0088B4);
   final _formKey = GlobalKey<FormState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   String _firstName, _lastName;
   String _email;
@@ -119,22 +121,41 @@ class _RegisterViewState extends State<RegisterView> {
     return null;
   }
 
-  void _registerHandler() {
+  void _registerHandler() async {
     if (_formKey.currentState.validate()) {
-      var registerDTO = new Register();
+      var registerDTO = new RegisterRequest();
 
       registerDTO.firstName = _firstName;
       registerDTO.lastName = _lastName;
       registerDTO.email = _email;
       registerDTO.password = _password;
-
-      Auth.register(registerDTO);
+      try {
+        await Auth.register(registerDTO);
+      } on RegisterException catch (e) {
+        print("tratande");
+        if (e.validation == Validation.unique) {
+          _showSnackBar("Já existe um utilizador com este email");
+        }
+      } catch (e) {
+        print("Ele morreu joao!" + e);
+      }
     }
+  }
+
+  void _showSnackBar(String text) {
+    _scaffoldKey.currentState.showSnackBar(new SnackBar(
+        action: new SnackBarAction(
+          label: "OK",
+          onPressed: () => {},
+          textColor: Colors.cyan,
+        ),
+        content: Text(text)));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        key: _scaffoldKey,
         resizeToAvoidBottomInset: false,
         body: Container(
           decoration: BoxDecoration(
