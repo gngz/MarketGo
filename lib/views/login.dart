@@ -86,6 +86,34 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 
+  Widget _divider() {
+    final Color color = Colors.grey[400];
+
+    return Container(
+        margin: EdgeInsets.symmetric(vertical: 20),
+        child: Row(
+          children: <Widget>[
+            Expanded(
+                child: Divider(
+              color: color,
+              thickness: 1.0,
+            )),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Text(
+                "Ou",
+                style: TextStyle(color: color),
+              ),
+            ),
+            Expanded(
+                child: Divider(
+              color: color,
+              thickness: 1.0,
+            ))
+          ],
+        ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -119,7 +147,7 @@ class _LoginViewState extends State<LoginView> {
                     ButtonBar(
                       children: <Widget>[registerButton(), loginButton()],
                     ),
-                    SizedBox(height: 8.0),
+                    _divider(),
                     Column(
                       children: <Widget>[
                         GoogleButton(onPressed: () => {}),
