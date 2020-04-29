@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import "package:dio/dio.dart";
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:marketgo/models/Register.dart';
+import 'package:marketgo/models/RegisterRequest.dart';
+import 'package:marketgo/models/RegisterResponse.dart';
+import 'package:marketgo/services/Exceptions.dart';
 import '../config.dart';
 
 class Auth {
@@ -18,10 +22,17 @@ class Auth {
     }
   }
 
-  static void register(Register registerDto) async {
-    try {
-      var response = await Dio()
-          .post("${Config.BASE_URL}/register", data: registerDto.toJson());
-    } catch (e) {}
+  static void register(RegisterRequest registerDto) async {
+    var response = await Dio()
+        .post("${Config.BASE_URL}/register", data: registerDto.toJson());
+    print(response.data);
+    RegisterResponse regResponse = RegisterResponse.fromJson(response.data[0]);
+    if (regResponse.token == null) {
+      throw new RegisterException(
+          RegisterException.getValidation(regResponse.validation),
+          regResponse.field);
+    }
+
+    print("this is response: $response");
   }
 }
