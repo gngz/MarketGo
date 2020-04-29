@@ -1,4 +1,4 @@
-class Register {
+class RegisterRequest {
   String firstName;
   String lastName;
   String email;
