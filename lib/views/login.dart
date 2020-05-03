@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:marketgo/components/FacebookButton.dart';
 import 'package:marketgo/components/GoogleButton.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import '../services/Auth.dart';
 
 class LoginView extends StatefulWidget {
@@ -12,9 +14,27 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   final logo = Image.asset("assets/logo.png");
   final _formKey = GlobalKey<FormState>();
-
+  final facebookLogin = FacebookLogin();
   String email;
   String password;
+
+  GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: [
+      'email',
+      'https://www.googleapis.com/auth/contacts.readonly',
+    ],
+  );
+  _loginWithFB() async {
+    facebookLogin.loginBehavior = FacebookLoginBehavior.nativeWithFallback;
+    final result = await facebookLogin.logInWithReadPermissions(['email']);
+    print(result);
+    /*switch (result.status) {
+      case FacebookLoginStatus.loggedIn:
+        final token = result.accessToken.token;
+
+      //final graphResponse = await http.get('https://graph.facebook.com/v2.12/me?fields=name,picture,email&access_token=${token}')
+    }*/
+  }
 
   void loginHandler() {
     if (_formKey.currentState.validate()) {
@@ -150,8 +170,11 @@ class _LoginViewState extends State<LoginView> {
                     _divider(),
                     Column(
                       children: <Widget>[
-                        GoogleButton(onPressed: () => {}),
-                        FacebookButton(onPressed: () => {}),
+                        GoogleButton(
+                            onPressed: () async =>
+                                {await _googleSignIn.signIn()}),
+                        FacebookButton(
+                            onPressed: () async => {await _loginWithFB()}),
                       ],
                     )
                   ],
