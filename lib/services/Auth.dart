@@ -12,7 +12,7 @@ class Auth {
 
   static void authenticate(String email, String password) async {
     try {
-      var response = await Dio().post(Config.BASE_URL + "/login",
+      var response = await Dio().post(Config.BASE_URL + "/authp",
           data: {"email": email, "password": password});
 
       await storage.write(key: "token", value: response.data);
@@ -24,7 +24,7 @@ class Auth {
 
   static void register(RegisterRequest registerDto) async {
     var response = await Dio()
-        .post("${Config.BASE_URL}/register", data: registerDto.toJson());
+        .post("${Config.BASE_URL}/auth/register", data: registerDto.toJson());
     print(response.data);
     RegisterResponse regResponse = RegisterResponse.fromJson(response.data[0]);
     if (regResponse.token == null) {
