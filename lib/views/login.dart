@@ -18,18 +18,27 @@ class _LoginViewState extends State<LoginView> {
   String email;
   String password;
 
-  GoogleSignIn _googleSignIn = GoogleSignIn(
-    scopes: [
-      'email',
-      'https://www.googleapis.com/auth/contacts.readonly',
-    ],
-  );
-
   _facebookHandler() async {
     facebookLogin.loginBehavior = FacebookLoginBehavior.nativeWithFallback;
     final result = await facebookLogin.logInWithReadPermissions(['email']);
-    await Auth.autenticateSocial(
-        SocialProvider.FACEBOOK, result.accessToken.token);
+    Auth.autenticateSocial(SocialProvider.FACEBOOK, result.accessToken.token);
+  }
+
+  _googleHandler() async {
+    GoogleSignIn googleSignIn = GoogleSignIn(
+      scopes: [
+        'email',
+        'https://www.googleapis.com/auth/contacts.readonly',
+      ],
+    );
+
+    try {
+      var result = await googleSignIn.signIn();
+      var auth = await result.authentication;
+      Auth.autenticateSocial(SocialProvider.GOOGLE, auth.accessToken);
+    } catch (e) {
+      print(e);
+    }
   }
 
   void loginHandler() {
@@ -167,8 +176,7 @@ class _LoginViewState extends State<LoginView> {
                     Column(
                       children: <Widget>[
                         GoogleButton(
-                            onPressed: () async =>
-                                {await _googleSignIn.signIn()}),
+                            onPressed: () async => {await _googleHandler()}),
                         FacebookButton(
                             onPressed: () async => {await _facebookHandler()}),
                       ],
