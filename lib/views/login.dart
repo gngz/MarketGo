@@ -4,7 +4,7 @@ import 'package:marketgo/components/FacebookButton.dart';
 import 'package:marketgo/components/GoogleButton.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import '../services/Auth.dart';
+import 'package:marketgo/services/Auth/Auth.dart';
 
 class LoginView extends StatefulWidget {
   @override
@@ -24,16 +24,12 @@ class _LoginViewState extends State<LoginView> {
       'https://www.googleapis.com/auth/contacts.readonly',
     ],
   );
-  _loginWithFB() async {
+
+  _facebookHandler() async {
     facebookLogin.loginBehavior = FacebookLoginBehavior.nativeWithFallback;
     final result = await facebookLogin.logInWithReadPermissions(['email']);
-    print(result);
-    /*switch (result.status) {
-      case FacebookLoginStatus.loggedIn:
-        final token = result.accessToken.token;
-
-      //final graphResponse = await http.get('https://graph.facebook.com/v2.12/me?fields=name,picture,email&access_token=${token}')
-    }*/
+    await Auth.autenticateSocial(
+        SocialProvider.FACEBOOK, result.accessToken.token);
   }
 
   void loginHandler() {
@@ -174,7 +170,7 @@ class _LoginViewState extends State<LoginView> {
                             onPressed: () async =>
                                 {await _googleSignIn.signIn()}),
                         FacebookButton(
-                            onPressed: () async => {await _loginWithFB()}),
+                            onPressed: () async => {await _facebookHandler()}),
                       ],
                     )
                   ],

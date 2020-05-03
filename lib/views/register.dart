@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:marketgo/models/RegisterRequest.dart';
-import 'package:marketgo/services/Auth.dart';
-import 'package:marketgo/services/Exceptions.dart';
+import 'package:marketgo/services/Auth/Auth.dart';
+import 'package:marketgo/services/Auth/Exceptions.dart';
 
 class RegisterView extends StatefulWidget {
   @override
