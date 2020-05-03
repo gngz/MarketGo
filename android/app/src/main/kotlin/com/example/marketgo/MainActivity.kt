@@ -1,4 +1,4 @@
-package com.example.marketgo
+package com.laughsoftware.marketgo
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity
