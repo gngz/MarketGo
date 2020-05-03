@@ -18,6 +18,10 @@ class _LoginViewState extends State<LoginView> {
   String email;
   String password;
 
+  _goListView() {
+    Navigator.pushReplacementNamed(context, "/listview");
+  }
+
   _facebookHandler() async {
     facebookLogin.loginBehavior = FacebookLoginBehavior.nativeWithFallback;
     final result = await facebookLogin.logInWithReadPermissions(['email']);
@@ -36,6 +40,7 @@ class _LoginViewState extends State<LoginView> {
       var result = await googleSignIn.signIn();
       var auth = await result.authentication;
       Auth.autenticateSocial(SocialProvider.GOOGLE, auth.accessToken);
+      _goListView();
     } catch (e) {
       print(e);
     }
