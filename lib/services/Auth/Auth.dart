@@ -45,7 +45,7 @@ class Auth {
     var response = await Dio()
         .post("${Config.BASE_URL}/auth/register", data: registerDto.toJson());
     print(response.data);
-    RegisterResponse regResponse = RegisterResponse.fromJson(response.data[0]);
+    RegisterResponse regResponse = RegisterResponse.fromJson(response.data);
     if (regResponse.token == null) {
       throw new RegisterException(
           RegisterException.getValidation(regResponse.validation),
