@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:marketgo/views/MyLists.dart';
 import './views/login.dart';
 import './views/register.dart';
 
@@ -10,8 +11,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'MarketGo',
-        initialRoute: '/',
-        routes: {'/register': (BuildContext context) => RegisterView()},
+        routes: {
+          '/register': (BuildContext context) => RegisterView(),
+          '/listview': (BuildContext context) => MyListsView()
+        },
         theme: ThemeData(
           // This is the theme of your application.
           //
