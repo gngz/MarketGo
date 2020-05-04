@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:marketgo/bloc/UserBloc.dart';
 import 'package:marketgo/models/User.dart';
 import 'package:marketgo/services/Auth/Auth.dart';
 
@@ -10,6 +11,7 @@ class MyListsView extends StatefulWidget {
 class _MyListsViewState extends State<MyListsView> {
   final ColorDarkBlue = Color(0xFF0083B0);
   final ColorLightBlue = Color(0xFF000B4DB);
+  final LoginDrawer loginDrawer = LoginDrawer();
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
@@ -22,7 +24,7 @@ class _MyListsViewState extends State<MyListsView> {
     return Scaffold(
       key: _scaffoldKey,
       drawer: Drawer(
-        child: LoginDrawer(),
+        child: loginDrawer,
       ),
       appBar: AppBar(
         backgroundColor: ColorDarkBlue,
@@ -66,22 +68,9 @@ class LoginDrawer extends StatefulWidget {
 }
 
 class _LoginDrawerState extends State<LoginDrawer> {
-  _LoginDrawerState() {
-    _getUserData();
-  }
-
-  _getUserData() async {
-    User user = await Auth.getUser();
-    setState(() {
-      userEmail = user.email;
-      userName = user.name;
-      userAvatar = user.avatar;
-    });
-  }
-
-  Widget _getAvatar() {
-    if (userAvatar != null) {
-      return Image.network(userAvatar);
+  Widget _getAvatar(avatar) {
+    if (avatar != null) {
+      return Image.network(avatar);
     }
     return Image.asset("assets/avatar.png");
   }
@@ -91,21 +80,22 @@ class _LoginDrawerState extends State<LoginDrawer> {
     Navigator.pushNamed(context, "/");
   }
 
-  String userName = "";
-  String userEmail = "";
-  String userAvatar;
-
   @override
   Widget build(BuildContext context) {
     return ListView(children: <Widget>[
-      UserAccountsDrawerHeader(
-        accountEmail: Text(userEmail),
-        accountName: Text(userName),
-        currentAccountPicture: ClipRRect(
-          borderRadius: BorderRadius.circular(110),
-          child: _getAvatar(),
-        ),
-      ),
+      StreamBuilder<User>(
+          stream: UserBloc().stream,
+          initialData: UserBloc().user,
+          builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
+            return UserAccountsDrawerHeader(
+              accountEmail: Text(snapshot.data.email),
+              accountName: Text(snapshot.data.name),
+              currentAccountPicture: ClipRRect(
+                borderRadius: BorderRadius.circular(110),
+                child: _getAvatar(snapshot.data.avatar),
+              ),
+            );
+          }),
       ListTile(
         leading: Icon(Icons.list),
         selected: true,
@@ -115,7 +105,10 @@ class _LoginDrawerState extends State<LoginDrawer> {
       ListTile(
         leading: Icon(Icons.payment),
         title: Text("Pagamentos"),
-        onTap: () => {},
+        onTap: () => {
+          UserBloc().setUser(new User(
+              avatar: null, name: "Josefino", email: "emai@dojose.fino"))
+        },
       ),
       ListTile(
         leading: Icon(Icons.exit_to_app),
