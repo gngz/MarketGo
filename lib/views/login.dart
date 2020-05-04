@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:marketgo/bloc/UserBloc.dart';
 import 'package:marketgo/components/FacebookButton.dart';
 import 'package:marketgo/components/GoogleButton.dart';
 import 'package:email_validator/email_validator.dart';
@@ -25,7 +26,11 @@ class _LoginViewState extends State<LoginView> {
 
   _checkLogin() async {
     User user = await Auth.getUser();
-    if (user.email != null) _goListView();
+
+    if (user.email != null) {
+      UserBloc().setUser(user);
+      _goListView();
+    }
   }
 
   _goListView() {
