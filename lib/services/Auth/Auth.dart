@@ -1,5 +1,6 @@
 import "package:dio/dio.dart";
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:marketgo/bloc/UserBloc.dart';
 import 'package:marketgo/models/RegisterRequest.dart';
 import 'package:marketgo/models/RegisterResponse.dart';
 import 'package:marketgo/models/LoginResponse.dart';
@@ -40,6 +41,7 @@ class Auth {
   }
 
   static void _storeData(User user, String token) async {
+    UserBloc().setUser(user);
     await storage.write(key: "token", value: token);
     await storage.write(key: "user_name", value: user.name);
     await storage.write(key: "user_email", value: user.email);
