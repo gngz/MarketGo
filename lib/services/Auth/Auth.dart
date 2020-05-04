@@ -13,7 +13,7 @@ class Auth {
 
   static void authenticate(String email, String password) async {
     try {
-      var response = await Dio().post(Config.BASE_URL + "/auth",
+      var response = await Dio().post(Config().baseUrl + "/auth",
           data: {"email": email, "password": password});
 
       await storage.write(key: "token", value: response.data);
@@ -27,9 +27,9 @@ class Auth {
     var url;
 
     if (provider == SocialProvider.FACEBOOK) {
-      url = Config.BASE_URL + "/auth/facebook";
+      url = Config().baseUrl + "/auth/facebook";
     } else {
-      url = Config.BASE_URL + "/auth/google";
+      url = Config().baseUrl + "/auth/google";
     }
     try {
       var response = await Dio().post(url, data: {"token": token});
@@ -43,7 +43,7 @@ class Auth {
 
   static void register(RegisterRequest registerDto) async {
     var response = await Dio()
-        .post("${Config.BASE_URL}/auth/register", data: registerDto.toJson());
+        .post("${Config().baseUrl}/auth/register", data: registerDto.toJson());
     print(response.data);
     RegisterResponse regResponse = RegisterResponse.fromJson(response.data);
     if (regResponse.token == null) {
