@@ -8,7 +8,9 @@
 .buildlog/
 .history
 .svn/
+# key stuff
 key.jks
+key.properties
 
 # IntelliJ related
 *.iml
