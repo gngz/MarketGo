@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:marketgo/bloc/ListsBloc.dart';
 import 'package:marketgo/bloc/UserBloc.dart';
+import 'package:marketgo/components/MenuDrawer.dart';
 import 'package:marketgo/models/ListModel.dart';
 import 'package:marketgo/models/User.dart';
 import 'package:marketgo/services/Auth/Auth.dart';
+import 'package:marketgo/services/Lists/ListService.dart';
 
 class MyListsView extends StatefulWidget {
   @override
@@ -13,10 +15,16 @@ class MyListsView extends StatefulWidget {
 class _MyListsViewState extends State<MyListsView> {
   final ColorDarkBlue = Color(0xFF0083B0);
   final ColorLightBlue = Color(0xFF000B4DB);
-  final LoginDrawer loginDrawer = LoginDrawer();
+  @override
+  void initState() {
+    super.initState();
+    ListsBloc().getListFromServer();
+  }
 
-  _addList(String name) {
-    ListsBloc().addList(new ListModel(name: name));
+  _addList(String name) async {
+    var listModel = new ListModel(name: name);
+    var addedList = await ListService().addUserList(listModel);
+    ListsBloc().addList(addedList);
   }
 
   Widget _inputDialog() {
@@ -87,9 +95,7 @@ class _MyListsViewState extends State<MyListsView> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      drawer: Drawer(
-        child: loginDrawer,
-      ),
+      drawer: MenuDrawer(),
       appBar: AppBar(
         backgroundColor: ColorDarkBlue,
         automaticallyImplyLeading: false,
@@ -164,74 +170,12 @@ class _MyListsViewState extends State<MyListsView> {
             ],
           )),
       floatingActionButton: FloatingActionButton(
+          //TODO EXTEIORIZE
           backgroundColor: ColorDarkBlue,
           onPressed: () => {_showInputDialog()},
           tooltip: "A new button",
           child: Icon(Icons.add)),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
-  }
-}
-
-class LoginDrawer extends StatefulWidget {
-  LoginDrawer({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  _LoginDrawerState createState() => _LoginDrawerState();
-}
-
-class _LoginDrawerState extends State<LoginDrawer> {
-  Widget _getAvatar(avatar) {
-    if (avatar != null) {
-      return Image.network(avatar);
-    }
-    return Image.asset("assets/avatar.png");
-  }
-
-  logout() async {
-    await Auth.logout();
-    Navigator.pushNamed(context, "/");
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView(children: <Widget>[
-      StreamBuilder<User>(
-          stream: UserBloc().stream,
-          initialData: UserBloc().user,
-          builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
-            return UserAccountsDrawerHeader(
-              accountEmail: Text(snapshot.data.email),
-              accountName: Text(snapshot.data.name),
-              currentAccountPicture: ClipRRect(
-                borderRadius: BorderRadius.circular(110),
-                child: _getAvatar(snapshot.data.avatar),
-              ),
-            );
-          }),
-      ListTile(
-        leading: Icon(Icons.list),
-        selected: true,
-        title: Text("Listas"),
-        onTap: () => {},
-      ),
-      ListTile(
-        leading: Icon(Icons.payment),
-        title: Text("Pagamentos"),
-        onTap: () => {
-          UserBloc().setUser(new User(
-              avatar: null, name: "Josefino", email: "emai@dojose.fino"))
-        },
-      ),
-      ListTile(
-        leading: Icon(Icons.exit_to_app),
-        title: Text("Logout"),
-        onTap: () async {
-          await logout();
-        },
-      ),
-    ]);
   }
 }
