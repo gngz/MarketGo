@@ -1,11 +1,10 @@
 import 'dart:async';
-
-import 'package:marketgo/models/User.dart';
+import 'package:marketgo/models/UserDTO.dart';
 
 class UserBloc {
   static final UserBloc _singleton = UserBloc._internal();
-  User _user;
-  User get user => _user;
+  UserDTO _user;
+  UserDTO get user => _user;
 
   factory UserBloc() {
     return _singleton;
@@ -13,11 +12,11 @@ class UserBloc {
 
   UserBloc._internal();
 
-  final _userBlocController = StreamController<User>.broadcast();
+  final _userBlocController = StreamController<UserDTO>.broadcast();
 
-  Stream<User> get stream => _userBlocController.stream;
+  Stream<UserDTO> get stream => _userBlocController.stream;
 
-  void setUser(User user) {
+  void setUser(UserDTO user) {
     this._user = user;
     _userBlocController.sink.add(user);
   }
