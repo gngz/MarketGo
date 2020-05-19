@@ -1,5 +1,6 @@
 import "package:dio/dio.dart";
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:marketgo/bloc/ListsBloc.dart';
 import 'package:marketgo/bloc/UserBloc.dart';
 import 'package:marketgo/models/RegisterRequest.dart';
 import 'package:marketgo/models/RegisterResponse.dart';
@@ -21,8 +22,14 @@ class Auth {
     return new User(email: email, name: name, avatar: avatar);
   }
 
+  static void _clearBlocs() {
+    UserBloc().clear();
+    ListsBloc().clear();
+  }
+
   static Future<void> logout() async {
     await storage.deleteAll();
+    _clearBlocs();
   }
 
   static void authenticate(String email, String password) async {
