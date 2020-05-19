@@ -5,7 +5,7 @@ import 'package:marketgo/components/FacebookButton.dart';
 import 'package:marketgo/components/GoogleButton.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:marketgo/models/User.dart';
+import 'package:marketgo/models/UserDTO.dart';
 import 'package:marketgo/services/Auth/Auth.dart';
 
 class LoginView extends StatefulWidget {
@@ -25,10 +25,9 @@ class _LoginViewState extends State<LoginView> {
   }
 
   _checkLogin() async {
-    User user = await Auth.getUser();
-
-    if (user.email != null) {
-      UserBloc().setUser(user);
+    UserDTO userData = await Auth.getUser();
+    if (userData.user.email != null) {
+      UserBloc().setUser(userData);
       _goListView();
     }
   }
@@ -40,7 +39,8 @@ class _LoginViewState extends State<LoginView> {
   _facebookHandler() async {
     facebookLogin.loginBehavior = FacebookLoginBehavior.nativeWithFallback;
     final result = await facebookLogin.logInWithReadPermissions(['email']);
-    Auth.autenticateSocial(SocialProvider.FACEBOOK, result.accessToken.token);
+    await Auth.autenticateSocial(
+        SocialProvider.FACEBOOK, result.accessToken.token);
     _goListView();
   }
 
@@ -55,18 +55,17 @@ class _LoginViewState extends State<LoginView> {
     try {
       var result = await googleSignIn.signIn();
       var auth = await result.authentication;
-      Auth.autenticateSocial(SocialProvider.GOOGLE, auth.accessToken);
+      await Auth.autenticateSocial(SocialProvider.GOOGLE, auth.accessToken);
       _goListView();
     } catch (e) {
       print(e);
     }
   }
 
-  void loginHandler() {
+  void loginHandler() async {
     if (_formKey.currentState.validate()) {
-      print("Email: $email ; Password: $password");
       try {
-        Auth.authenticate(this.email, this.password);
+        await Auth.authenticate(this.email, this.password);
         _goListView();
       } catch (e) {}
     }

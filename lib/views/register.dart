@@ -132,13 +132,10 @@ class _RegisterViewState extends State<RegisterView> {
       try {
         await Auth.register(registerDTO);
       } on RegisterException catch (e) {
-        print("tratande");
         if (e.validation == Validation.unique) {
           _showSnackBar("Já existe um utilizador com este email");
         }
-      } catch (e) {
-        print("Ele morreu joao!" + e);
-      }
+      } catch (e) {}
     }
   }
 
