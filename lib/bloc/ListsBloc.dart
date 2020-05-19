@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:marketgo/models/ListModel.dart';
+import 'package:marketgo/services/Lists/ListService.dart';
 
 class ListsBloc {
   static final ListsBloc _singleton = ListsBloc._internal();
@@ -19,6 +20,11 @@ class ListsBloc {
   final _listBlocController = StreamController<List<ListModel>>.broadcast();
 
   Stream<List<ListModel>> get stream => _listBlocController.stream;
+
+  getListFromServer() async {
+    lists = await ListService().getUserLists();
+    _listBlocController.sink.add(lists);
+  }
 
   addList(ListModel list) {
     lists.add(list);
