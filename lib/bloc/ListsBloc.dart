@@ -5,13 +5,16 @@ import 'package:marketgo/models/ListModel.dart';
 class ListsBloc {
   static final ListsBloc _singleton = ListsBloc._internal();
 
-  List<ListModel> lists = new List<ListModel>();
+  List<ListModel> lists;
 
   factory ListsBloc() {
     return _singleton;
   }
 
-  ListsBloc._internal();
+  ListsBloc._internal() {
+    lists = new List<ListModel>();
+    _listBlocController.sink.add(lists);
+  }
 
   final _listBlocController = StreamController<List<ListModel>>.broadcast();
 
@@ -24,6 +27,11 @@ class ListsBloc {
 
   removeList(ListModel list) {
     lists.remove(list);
+    _listBlocController.sink.add(lists);
+  }
+
+  clear() {
+    lists.clear();
     _listBlocController.sink.add(lists);
   }
 
