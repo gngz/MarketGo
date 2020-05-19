@@ -22,6 +22,10 @@ class UserBloc {
     _userBlocController.sink.add(user);
   }
 
+  void clear() {
+    this._user = null;
+  }
+
   void dispose() {
     _userBlocController.close();
   }
