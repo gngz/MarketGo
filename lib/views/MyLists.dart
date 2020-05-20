@@ -27,6 +27,16 @@ class _MyListsViewState extends State<MyListsView> {
     ListsBloc().addList(addedList);
   }
 
+  void _showSnackBar(String text) {
+    _scaffoldKey.currentState.showSnackBar(new SnackBar(
+        action: new SnackBarAction(
+          label: "OK",
+          onPressed: () => {},
+          textColor: Colors.cyan,
+        ),
+        content: Text(text)));
+  }
+
   Widget _inputDialog() {
     String listName = "";
 
@@ -141,8 +151,13 @@ class _MyListsViewState extends State<MyListsView> {
                     confirmDismiss: (direction) async {
                       return _confirmDelete(snapshot.data[index].name);
                     },
-                    onDismissed: (direction) {
-                      ListsBloc().removeList(snapshot.data[index]);
+                    onDismissed: (direction) async {
+                      var isDeleted = await ListService()
+                          .removeUserList(snapshot.data[index]);
+                      if (isDeleted)
+                        ListsBloc().removeList(snapshot.data[index]);
+                      else
+                        _showSnackBar("Não foi possível apagar.");
                     },
                     child: ListTile(
                       title: Text(snapshot.data[index].name),
