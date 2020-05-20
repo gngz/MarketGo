@@ -1,4 +1,3 @@
-import "package:dio/dio.dart";
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:marketgo/bloc/ListsBloc.dart';
 import 'package:marketgo/bloc/UserBloc.dart';
@@ -6,8 +5,8 @@ import 'package:marketgo/models/RegisterRequest.dart';
 import 'package:marketgo/models/RegisterResponse.dart';
 import 'package:marketgo/models/UserDTO.dart';
 import 'package:marketgo/models/User.dart';
+import 'package:marketgo/services/ApiService.dart';
 import 'package:marketgo/services/Auth/Exceptions.dart';
-import 'package:marketgo/config.dart';
 
 enum SocialProvider { FACEBOOK, GOOGLE }
 
@@ -35,8 +34,9 @@ class Auth {
 
   static Future<void> authenticate(String email, String password) async {
     try {
-      var response = await Dio().post(Config().baseUrl + "/auth",
-          data: {"email": email, "password": password});
+      var response = await ApiService()
+          .getHttp()
+          .post("/auth", data: {"email": email, "password": password});
 
       var loginData = UserDTO.fromJson(response.data);
 
@@ -60,12 +60,13 @@ class Auth {
     var url;
 
     if (provider == SocialProvider.FACEBOOK) {
-      url = Config().baseUrl + "/auth/facebook";
+      url = "/auth/facebook";
     } else {
-      url = Config().baseUrl + "/auth/google";
+      url = "/auth/google";
     }
     try {
-      var response = await Dio().post(url, data: {"token": token});
+      var response =
+          await ApiService().getHttp().post(url, data: {"token": token});
       var userData = UserDTO.fromJson(response.data);
 
       await _storeData(userData);
@@ -75,8 +76,9 @@ class Auth {
   }
 
   static void register(RegisterRequest registerDto) async {
-    var response = await Dio()
-        .post("${Config().baseUrl}/auth/register", data: registerDto.toJson());
+    var response = await ApiService()
+        .getHttp()
+        .post("/auth/register", data: registerDto.toJson());
     RegisterResponse regResponse = RegisterResponse.fromJson(response.data);
     if (regResponse.token == null) {
       throw new RegisterException(
