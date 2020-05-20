@@ -1,7 +1,6 @@
-import 'package:dio/dio.dart';
 import 'package:marketgo/bloc/UserBloc.dart';
-import 'package:marketgo/config.dart';
 import 'package:marketgo/models/ListModel.dart';
+import 'package:marketgo/services/ApiService.dart';
 
 class ListService {
   static ListService _instance = ListService._internal();
@@ -14,20 +13,43 @@ class ListService {
 
   Future<List<ListModel>> getUserLists() async {
     var token = UserBloc().user.token;
-    var response = await Dio().get(Config().baseUrl + "/list",
-        options: Options(headers: {'Authorization': "Bearer $token"}));
+    var response = await ApiService().getAuthHttp().get("/list");
     print(response); //TODO try catrch
-    var list = ListModel.fromList(response.data);
+    List<ListModel> list;
+    try {
+      list = ListModel.fromList(response.data);
+    } catch (e) {
+      print("Ocorreu um euro ao buscar listas $e");
+      return null;
+    }
     return list;
   }
 
   Future<ListModel> addUserList(ListModel listModel) async {
     var token = UserBloc().user.token;
-    var response = await Dio().post(Config().baseUrl + "/list",
-        data: {"name": listModel.name},
-        options: Options(headers: {'Authorization': "Bearer $token"}));
+    var response = await ApiService()
+        .getAuthHttp()
+        .post("/list", data: {"name": listModel.name});
     //TODO try catch
-    var list = ListModel.fromJson(response.data);
+    ListModel list;
+    try {
+      list = ListModel.fromJson(response.data);
+    } catch (e) {
+      print("Ocorreu umao adicionar uma lista $e");
+      return null;
+    }
     return list;
+  }
+
+  Future<bool> removeUserList(ListModel list) async {
+    var token = UserBloc().user.token;
+    try {
+      var response =
+          await ApiService().getAuthHttp().delete("/list/${list.id}");
+      if (response.statusCode == 200) return true;
+    } catch (e) {
+      print(e);
+    }
+    return false;
   }
 }
