@@ -13,7 +13,7 @@ class MyListsView extends StatefulWidget {
 }
 
 class _MyListsViewState extends State<MyListsView> {
-  final ColorDarkBlue = Color(0xFF0083B0);
+  final ColorDarkBlue = Color(0xFF0083B0); //TODO COLOCAR NUMA STATIC class
   final ColorLightBlue = Color(0xFF000B4DB);
   @override
   void initState() {
