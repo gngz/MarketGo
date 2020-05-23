@@ -54,10 +54,21 @@ class ListService {
   }
 
   Future<bool> removeUserList(ListModel list) async {
-    var token = UserBloc().user.token;
     try {
       var response =
           await ApiService().getAuthHttp().delete("/list/${list.id}");
+      if (response.statusCode == 200) return true;
+    } catch (e) {
+      print(e);
+    }
+    return false;
+  }
+
+  Future<bool> removeProductFromList(Product product, int id) async {
+    try {
+      var response = await ApiService()
+          .getAuthHttp()
+          .delete("/cart/product", data: {"id": id, "ean": product.ean});
       if (response.statusCode == 200) return true;
     } catch (e) {
       print(e);

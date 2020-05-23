@@ -28,6 +28,16 @@ class ProductsBloc {
     ProductsBloc().setProduct(products);
   }
 
+  Future<bool> removeProduct(Product prod, int listId) async {
+    var isRemoved = await ListService().removeProductFromList(prod, listId);
+    if (isRemoved) {
+      _product.remove(prod);
+      _productBlocController.sink.add(_product);
+      return true;
+    }
+    return false;
+  }
+
   void clear() {
     this._product = null;
   }
