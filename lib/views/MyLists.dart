@@ -152,7 +152,7 @@ class _MyListsViewState extends State<MyListsView> {
                     direction: DismissDirection.endToStart,
                     key: ObjectKey(snapshot.data[index]),
                     confirmDismiss: (direction) async {
-                      return _confirmDelete(snapshot.data[index].name);
+                      return await _confirmDelete(snapshot.data[index].name);
                     },
                     onDismissed: (direction) async {
                       var isDeleted = await ListService()
