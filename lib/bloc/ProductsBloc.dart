@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:marketgo/models/Product.dart';
+import 'package:marketgo/services/Lists/ListService.dart';
 
 class ProductsBloc {
   static final ProductsBloc _instance = ProductsBloc._internal();
@@ -20,6 +21,11 @@ class ProductsBloc {
   void setProduct(List<Product> product) {
     this._product = product;
     _productBlocController.sink.add(product);
+  }
+
+  Future<void> getFromServer(int id) async {
+    var products = await ListService().getProducts(id);
+    ProductsBloc().setProduct(products);
   }
 
   void clear() {
