@@ -28,7 +28,7 @@ class _ListViewerState extends State<ListViewer> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-          child: FaIcon(FontAwesomeIcons.barcode), onPressed: () {}),
+          child: FaIcon(FontAwesomeIcons.shoppingCart), onPressed: () {}),
       appBar: AppBar(
         backgroundColor: ColorDarkBlue,
         title: Text(widget.list.name),
