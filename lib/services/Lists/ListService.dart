@@ -1,5 +1,6 @@
 import 'package:marketgo/bloc/UserBloc.dart';
 import 'package:marketgo/models/ListModel.dart';
+import 'package:marketgo/models/Product.dart';
 import 'package:marketgo/services/ApiService.dart';
 
 class ListService {
@@ -23,6 +24,17 @@ class ListService {
       return null;
     }
     return list;
+  }
+
+  // TODO SOME shit
+  Future<List<Product>> getProducts(int id) async {
+    var response = await ApiService().getAuthHttp().get("/list/$id/products/");
+
+    if (response.statusCode == 200) {
+      return Product.fromList(response.data);
+    } else {
+      return null;
+    }
   }
 
   Future<ListModel> addUserList(ListModel listModel) async {
