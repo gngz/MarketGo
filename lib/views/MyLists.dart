@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:marketgo/bloc/ListsBloc.dart';
+import 'package:marketgo/bloc/ProductsBloc.dart';
 import 'package:marketgo/bloc/UserBloc.dart';
 import 'package:marketgo/components/MenuDrawer.dart';
 import 'package:marketgo/models/ListModel.dart';
 import 'package:marketgo/models/User.dart';
 import 'package:marketgo/services/Auth/Auth.dart';
 import 'package:marketgo/services/Lists/ListService.dart';
+
+import 'ListViewer.dart';
 
 class MyListsView extends StatefulWidget {
   @override
@@ -161,7 +164,14 @@ class _MyListsViewState extends State<MyListsView> {
                     },
                     child: ListTile(
                       title: Text(snapshot.data[index].name),
-                      onTap: () {},
+                      onTap: () async {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ListViewer(
+                                      list: snapshot.data[index],
+                                    )));
+                      },
                       trailing: Icon(Icons.chevron_right),
                     ),
                   );
