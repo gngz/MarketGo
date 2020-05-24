@@ -1,10 +1,9 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:marketgo/bloc/ProductsBloc.dart';
 import 'package:marketgo/models/ListModel.dart';
 import 'package:marketgo/models/Product.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 class ListViewer extends StatefulWidget {
@@ -22,6 +21,8 @@ class _ListViewerState extends State<ListViewer> {
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
+  bool isShopMode = false;
+
   @override
   void initState() {
     super.initState();
@@ -33,8 +34,7 @@ class _ListViewerState extends State<ListViewer> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      floatingActionButton: FloatingActionButton(
-          child: FaIcon(FontAwesomeIcons.shoppingCart), onPressed: () {}),
+      floatingActionButton: _getFAB(),
       appBar: AppBar(
         backgroundColor: ColorDarkBlue,
         title: Text(widget.list.name),
@@ -69,28 +69,19 @@ class _ListViewerState extends State<ListViewer> {
                         itemBuilder: (context, index) {
                           var product = snapshot.data[index];
                           return Dismissible(
-                            background: _dismissibleBackground(),
-                            direction: DismissDirection.endToStart,
-                            key: ObjectKey(product),
-                            confirmDismiss: (direction) async {
-                              return await _confirmDelete(product.name);
-                            },
-                            onDismissed: (direction) async {
-                              var isDeleted = await ProductsBloc()
-                                  .removeProduct(product, widget.list.id);
-                              if (!isDeleted)
-                                _showSnackBar("Não foi possível apagar.");
-                            },
-                            child: ListTile(
-                              leading: Image.network(product.image),
-                              title: Text(product.name),
-                              subtitle: Text("${product.price}€"),
-                              trailing: Text("QTY ${product.quantity}"),
-                              onTap: () {
-                                _editQuantity(product);
+                              background: _dismissibleBackground(),
+                              direction: DismissDirection.endToStart,
+                              key: ObjectKey(product),
+                              confirmDismiss: (direction) async {
+                                return await _confirmDelete(product.name);
                               },
-                            ),
-                          );
+                              onDismissed: (direction) async {
+                                var isDeleted = await ProductsBloc()
+                                    .removeProduct(product, widget.list.id);
+                                if (!isDeleted)
+                                  _showSnackBar("Não foi possível apagar.");
+                              },
+                              child: _productTile(product));
                         },
                         separatorBuilder: (context, index) => Divider(),
                         itemCount: snapshot.data.length),
@@ -101,6 +92,29 @@ class _ListViewerState extends State<ListViewer> {
               return Center(child: CircularProgressIndicator());
             }
           }),
+    );
+  }
+
+  Widget _productTile(Product product) {
+    return ListTile(
+      leading: Image.network(product.image),
+      trailing: _getTrailingIcon(product),
+      title: Text(product.name),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text("Quantidade: ${product.quantity}"),
+          Text("Preço Unitário: ${product.price}€"),
+        ],
+      ),
+      onTap: () async {
+        var newQuantity = await _showEditQuantity(product);
+
+        if (newQuantity != null) {
+          await ProductsBloc()
+              .updateQuantity(widget.list.id, product, newQuantity);
+        }
+      },
     );
   }
 
@@ -144,20 +158,21 @@ class _ListViewerState extends State<ListViewer> {
         });
   }
 
-  Future<int> _editQuantity(Product product) async {
+  Future<int> _showEditQuantity(Product product) async {
     return await showDialog<int>(
       context: context,
       builder: (BuildContext context) {
         return new NumberPickerDialog.integer(
-          minValue: 0,
+          confirmWidget: Text("Ok"),
+          cancelWidget: Text("Cancelar"),
+          title: new Text("Selecione uma nova quantidade:"),
+          minValue: 1,
           maxValue: 100,
           step: 1,
           initialIntegerValue: product.quantity,
         );
       },
-    ).then((num value) {
-      if (value != null) {}
-    });
+    );
   }
 
   //return NumberPicker.integer(initialValue: 1, minValue: 1, maxValue: 100, onChanged: () => {});
@@ -174,5 +189,39 @@ class _ListViewerState extends State<ListViewer> {
           textColor: Colors.cyan,
         ),
         content: Text(text)));
+  }
+
+  Widget _getFAB() {
+    if (isShopMode) {
+      return FloatingActionButton(
+          child: Image.asset("assets/barcode-icon.png", height: 32, width: 32),
+          onPressed: () async {
+            String barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+                "#FF0000", "Cancelar", true, ScanMode.DEFAULT);
+
+            print("BARCODE: $barcodeScanRes");
+
+            ProductsBloc().setReaded(barcodeScanRes);
+          });
+    } else {
+      return FloatingActionButton(
+          child: FaIcon(FontAwesomeIcons.shoppingCart),
+          onPressed: () {
+            setState(() {
+              this.isShopMode = true;
+            });
+          });
+    }
+  }
+
+  Widget _getTrailingIcon(Product product) {
+    if (isShopMode) {
+      if (product.readed) {
+        return Image.asset("assets/barcode-green.png", height: 32, width: 32);
+      }
+      return Image.asset("assets/barcode-red.png", height: 32, width: 32);
+    }
+
+    return null;
   }
 }
