@@ -17,6 +17,7 @@ environment:
   sdk: ">=2.2.0 <3.0.0"
 
 dependencies:
+  flutter_barcode_scanner: ^1.0.1
   font_awesome_flutter: ^8.8.1
   flutter_secure_storage: ^3.3.3
   flutter_facebook_login: ^1.2.0
