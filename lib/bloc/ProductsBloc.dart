@@ -38,6 +38,31 @@ class ProductsBloc {
     return false;
   }
 
+  Future<bool> updateQuantity(int listId, Product product, int quantity) async {
+    bool isUpdated =
+        await ListService().updateProductQuantity(listId, product, quantity);
+
+    if (isUpdated) {
+      var index = _product.indexOf(product);
+      if (index != -1) {
+        _product[index].quantity = quantity;
+        _productBlocController.sink.add(_product);
+      }
+    }
+
+    return isUpdated;
+  }
+
+  void setReaded(String ean) {
+    var product =
+        _product.where((element) => element.ean.compareTo(ean) == 0).toList();
+
+    if (product.length == 1) {
+      product[0].readed = true;
+      _productBlocController.sink.add(_product);
+    }
+  }
+
   void clear() {
     this._product = null;
   }
