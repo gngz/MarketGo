@@ -5,6 +5,8 @@ class Product {
   double price;
   String image;
   int quantity;
+  bool readed = false;
+
   Product({
     this.ean,
     this.name,
