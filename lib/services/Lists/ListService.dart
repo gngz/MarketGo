@@ -75,4 +75,17 @@ class ListService {
     }
     return false;
   }
+
+  Future<bool> updateProductQuantity(
+      int listId, Product product, int quantity) async {
+    try {
+      var response = await ApiService().getAuthHttp().patch("/cart/product",
+          data: {"id": listId, "ean": product.ean, "quantity": quantity});
+
+      if (response.statusCode == 200) return true;
+    } catch (e) {
+      print(e);
+    }
+    return false;
+  }
 }
