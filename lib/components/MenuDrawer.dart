@@ -51,7 +51,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
         ListTile(
           leading: Icon(Icons.payment),
           title: Text("Pagamentos"),
-          onTap: () => {},
+          onTap: () => {Navigator.pushNamed(context, "/cards")},
         ),
         ListTile(
           leading: Icon(Icons.exit_to_app),
