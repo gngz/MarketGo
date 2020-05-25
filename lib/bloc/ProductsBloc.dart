@@ -58,6 +58,7 @@ class ProductsBloc {
         _product.where((element) => element.ean.compareTo(ean) == 0).toList();
 
     if (product.length == 1) {
+      if (product[0].readed == true) throw Error();
       product[0].readed = true;
       _productBlocController.sink.add(_product);
       return true;
