@@ -223,9 +223,15 @@ class _ListViewerState extends State<ListViewer> {
   Widget _getTrailingIcon(Product product) {
     if (isShopMode) {
       if (product.readed) {
-        return Image.asset("assets/barcode-green.png", height: 32, width: 32);
+        return Image.asset(
+          "assets/barcode-green.png",
+          height: 32,
+          width: 32,
+          color: Color.fromARGB(255, 0, 0, 0),
+        );
       }
-      return Image.asset("assets/barcode-red.png", height: 32, width: 32);
+      return Image.asset("assets/barcode-red.png",
+          height: 32, width: 32, color: Color.fromARGB(50, 0, 0, 0));
     }
 
     return null;
