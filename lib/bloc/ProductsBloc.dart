@@ -53,7 +53,7 @@ class ProductsBloc {
     return isUpdated;
   }
 
-  bool setReaded(String ean) {
+  Future<bool> setReaded(String ean, int listId) async {
     var product =
         _product.where((element) => element.ean.compareTo(ean) == 0).toList();
 
@@ -61,6 +61,15 @@ class ProductsBloc {
       product[0].readed = true;
       _productBlocController.sink.add(_product);
       return true;
+    } else {
+      var newProduct = await ListService().addProductByEan(ean, listId, 1);
+      if (newProduct != null) {
+        newProduct.readed = true;
+        newProduct.quantity = 1;
+        _product.add(newProduct);
+        _productBlocController.sink.add(_product);
+        return true;
+      }
     }
 
     return false;
