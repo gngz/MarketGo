@@ -28,15 +28,19 @@ class _LoginViewState extends State<LoginView> {
 
   _checkLogin() async {
     try {
+      _showLoadingDialog();
       UserDTO userData = await Auth.getUser();
       if (userData.user.email != null) {
         UserBloc().setUser(userData);
+        Navigator.pop(context);
         _goListView();
       }
     } catch (e) {
       print(e);
       _showSnackBar("Ocorreu um erro ao iniciar sessão!");
+      Navigator.pop(context);
     }
+    Navigator.pop(context);
   }
 
   _goListView() {
@@ -47,6 +51,7 @@ class _LoginViewState extends State<LoginView> {
     facebookLogin.loginBehavior = FacebookLoginBehavior.nativeWithFallback;
     try {
       final result = await facebookLogin.logInWithReadPermissions(['email']);
+      _showLoadingDialog();
       await Auth.autenticateSocial(
           SocialProvider.FACEBOOK, result.accessToken.token);
       _goListView();
@@ -54,9 +59,11 @@ class _LoginViewState extends State<LoginView> {
       if (e.type == DioErrorType.CONNECT_TIMEOUT) {
         _showSnackBar("Não foi possivel contactar o servidor!");
       }
+      Navigator.pop(context);
     } catch (e) {
       _showSnackBar("Ocorreu um erro ao iniciar sessão!");
       print(e);
+      Navigator.pop(context);
     }
   }
 
@@ -74,7 +81,7 @@ class _LoginViewState extends State<LoginView> {
       _showLoadingDialog();
       await Auth.autenticateSocial(SocialProvider.GOOGLE, auth.accessToken);
       Navigator.pop(context); //pode dar shit
-      _goListView();
+      return _goListView();
     } on DioError catch (e) {
       if (e.type == DioErrorType.CONNECT_TIMEOUT) {
         _showSnackBar("Não foi possivel contactar o servidor!");
@@ -268,6 +275,5 @@ class _LoginViewState extends State<LoginView> {
             child: CircularProgressIndicator(),
           );
         });
-    //needs refactoring i'd like dependency inversion here but idk how to! im a noob :'( pls help lord of programming aka gngz)
   }
 }
