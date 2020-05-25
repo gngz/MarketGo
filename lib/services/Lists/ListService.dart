@@ -94,8 +94,10 @@ class ListService {
     try {
       var response = await ApiService().getAuthHttp().post("/cart/product",
           data: {"id": listId, "ean": ean, "quantity": quantity});
-      var product = Product.fromJson(response.data);
-      if (response.statusCode == 201) return product;
+
+      if (response.statusCode == 201) {
+        return Product.fromJson(response.data);
+      }
     } on DioError catch (e) {
       print(e);
     }
