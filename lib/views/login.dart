@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:marketgo/bloc/UserBloc.dart';
@@ -19,16 +20,22 @@ class _LoginViewState extends State<LoginView> {
   final facebookLogin = FacebookLogin();
   String email;
   String password;
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
   _LoginViewState() {
     _checkLogin();
   }
 
   _checkLogin() async {
-    UserDTO userData = await Auth.getUser();
-    if (userData.user.email != null) {
-      UserBloc().setUser(userData);
-      _goListView();
+    try {
+      UserDTO userData = await Auth.getUser();
+      if (userData.user.email != null) {
+        UserBloc().setUser(userData);
+        _goListView();
+      }
+    } catch (e) {
+      print(e);
+      _showSnackBar("Ocorreu um erro ao iniciar sessão!");
     }
   }
 
@@ -38,10 +45,19 @@ class _LoginViewState extends State<LoginView> {
 
   _facebookHandler() async {
     facebookLogin.loginBehavior = FacebookLoginBehavior.nativeWithFallback;
-    final result = await facebookLogin.logInWithReadPermissions(['email']);
-    await Auth.autenticateSocial(
-        SocialProvider.FACEBOOK, result.accessToken.token);
-    _goListView();
+    try {
+      final result = await facebookLogin.logInWithReadPermissions(['email']);
+      await Auth.autenticateSocial(
+          SocialProvider.FACEBOOK, result.accessToken.token);
+      _goListView();
+    } on DioError catch (e) {
+      if (e.type == DioErrorType.CONNECT_TIMEOUT) {
+        _showSnackBar("Não foi possivel contactar o servidor!");
+      }
+    } catch (e) {
+      _showSnackBar("Ocorreu um erro ao iniciar sessão!");
+      print(e);
+    }
   }
 
   _googleHandler() async {
@@ -55,19 +71,40 @@ class _LoginViewState extends State<LoginView> {
     try {
       var result = await googleSignIn.signIn();
       var auth = await result.authentication;
+      _showLoadingDialog();
       await Auth.autenticateSocial(SocialProvider.GOOGLE, auth.accessToken);
+      Navigator.pop(context); //pode dar shit
       _goListView();
+    } on DioError catch (e) {
+      if (e.type == DioErrorType.CONNECT_TIMEOUT) {
+        _showSnackBar("Não foi possivel contactar o servidor!");
+      }
+      Navigator.pop(context);
     } catch (e) {
+      _showSnackBar("Ocorreu um erro ao iniciar sessão!");
       print(e);
+      Navigator.pop(context);
     }
   }
 
   void loginHandler() async {
     if (_formKey.currentState.validate()) {
       try {
+        _showLoadingDialog();
+
         await Auth.authenticate(this.email, this.password);
+        Navigator.pop(context);
         _goListView();
-      } catch (e) {}
+      } on DioError catch (e) {
+        if (e.type == DioErrorType.CONNECT_TIMEOUT) {
+          _showSnackBar("Não foi possivel contactar o servidor!");
+        }
+        Navigator.pop(context);
+      } catch (e) {
+        _showSnackBar("Ocorreu um erro ao iniciar sessão!");
+        print(e);
+        Navigator.pop(context);
+      }
     }
   }
 
@@ -163,6 +200,7 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        key: _scaffoldKey,
         resizeToAvoidBottomInset: false,
         body: Container(
           decoration: BoxDecoration(
@@ -209,5 +247,27 @@ class _LoginViewState extends State<LoginView> {
             ),
           ),
         ));
+  }
+
+  void _showSnackBar(String text) {
+    _scaffoldKey.currentState.showSnackBar(new SnackBar(
+        action: new SnackBarAction(
+          label: "OK",
+          onPressed: () => {},
+          textColor: Colors.cyan,
+        ),
+        content: Text(text)));
+  }
+
+  void _showLoadingDialog() {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        });
+    //needs refactoring i'd like dependency inversion here but idk how to! im a noob :'( pls help lord of programming aka gngz)
   }
 }
