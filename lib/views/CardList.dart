@@ -10,6 +10,21 @@ class CardList extends StatefulWidget {
 
 void _addCard() {}
 
+Image _getImageByCardBrand(String brand) {
+  switch (brand.toLowerCase()) {
+    case "visa":
+      return Image.asset("assets/cards/visa.png");
+    case "mastercard":
+      return Image.asset("assets/cards/mastercard.png");
+    case "amex":
+      return Image.asset("assets/cards/amex.png");
+    case "discover":
+      return Image.asset("assets/cards/discovery.png");
+    default:
+      return Image.asset("assets/cards/visa.png");
+  }
+}
+
 class _CardListState extends State<CardList> {
   @override
   void initState() {
@@ -38,8 +53,11 @@ class _CardListState extends State<CardList> {
                     var card = snapshot.data[index];
 
                     return Card(
-                      child: Text(card.brand),
-                    );
+                        child: ListTile(
+                      leading: _getImageByCardBrand(card.brand),
+                      title: Text(card.cardHolder),
+                      subtitle: Text("*${card.lastFour}"),
+                    ));
                   });
             }));
   }
