@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:marketgo/views/CarList.dart';
+import 'package:marketgo/views/CardList.dart';
 import 'package:marketgo/views/MyLists.dart';
 import './views/login.dart';
 import './views/register.dart';
