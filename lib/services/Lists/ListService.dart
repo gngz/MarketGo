@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:marketgo/bloc/UserBloc.dart';
 import 'package:marketgo/models/ListModel.dart';
 import 'package:marketgo/models/Product.dart';
@@ -87,5 +88,17 @@ class ListService {
       print(e);
     }
     return false;
+  }
+
+  Future<Product> addProductByEan(String ean, int listId, int quantity) async {
+    try {
+      var response = await ApiService().getAuthHttp().post("/cart/product",
+          data: {"id": listId, "ean": ean, "quantity": quantity});
+      var product = Product.fromJson(response.data);
+      if (response.statusCode == 201) return product;
+    } on DioError catch (e) {
+      print(e);
+    }
+    return null;
   }
 }

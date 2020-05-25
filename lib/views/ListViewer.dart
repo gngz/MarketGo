@@ -202,12 +202,13 @@ class _ListViewerState extends State<ListViewer> {
             print("BARCODE: $barcodeScanRes");
 
             if (barcodeScanRes != "-1") {
-              if (!ProductsBloc().setReaded(barcodeScanRes)) {
-                //show product notfound snackbar
+              if (await ProductsBloc()
+                  .setReaded(barcodeScanRes, widget.list.id)) {
+                _showSnackBar("Produto adicionado com sucesso");
+              } else {
+                _showSnackBar("O produto não está disponível!");
               }
-            } else {
-              // show snackbar
-            }
+            } else {}
           });
     } else {
       return FloatingActionButton(
@@ -227,7 +228,8 @@ class _ListViewerState extends State<ListViewer> {
           "assets/barcode-green.png",
           height: 32,
           width: 32,
-          color: Color.fromARGB(255, 0, 0, 0),
+/*           color: Color.fromARGB(255, 0, 255, 0),
+ */
         );
       }
       return Image.asset("assets/barcode-red.png",
