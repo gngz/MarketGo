@@ -33,17 +33,13 @@ class Auth {
   }
 
   static Future<void> authenticate(String email, String password) async {
-    try {
-      var response = await ApiService()
-          .getHttp()
-          .post("/auth", data: {"email": email, "password": password});
+    var response = await ApiService()
+        .getHttp()
+        .post("/auth", data: {"email": email, "password": password});
 
-      var loginData = UserDTO.fromJson(response.data);
+    var loginData = UserDTO.fromJson(response.data);
 
-      await _storeData(loginData);
-    } catch (e) {
-      print(e);
-    }
+    await _storeData(loginData);
   }
 
   static Future<void> _storeData(UserDTO userData) async {
@@ -64,15 +60,11 @@ class Auth {
     } else {
       url = "/auth/google";
     }
-    try {
-      var response =
-          await ApiService().getHttp().post(url, data: {"token": token});
-      var userData = UserDTO.fromJson(response.data);
+    var response =
+        await ApiService().getHttp().post(url, data: {"token": token});
+    var userData = UserDTO.fromJson(response.data);
 
-      await _storeData(userData);
-    } catch (e) {
-      print(e);
-    }
+    await _storeData(userData);
   }
 
   static void register(RegisterRequest registerDto) async {
