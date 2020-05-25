@@ -13,6 +13,11 @@ class ApiService {
   Dio getHttp() {
     var dio = new Dio();
     dio.options.baseUrl = Config().baseUrl;
+    dio.options.connectTimeout = 5 * 1000; //2 secs
+    dio.interceptors.add(InterceptorsWrapper(onError: (DioError e) async {
+      //mostrar um toast de erro, com inversão de dependências era capaz de se tornar fixe...
+      return e;
+    }));
     return dio;
   }
 
