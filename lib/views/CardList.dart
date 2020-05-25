@@ -10,26 +10,72 @@ class CardList extends StatefulWidget {
 
 void _addCard() {}
 
-Image _getImageByCardBrand(String brand) {
-  switch (brand.toLowerCase()) {
-    case "visa":
-      return Image.asset("assets/cards/visa.png");
-    case "mastercard":
-      return Image.asset("assets/cards/mastercard.png");
-    case "amex":
-      return Image.asset("assets/cards/amex.png");
-    case "discover":
-      return Image.asset("assets/cards/discovery.png");
-    default:
-      return Image.asset("assets/cards/visa.png");
-  }
-}
-
 class _CardListState extends State<CardList> {
   @override
   void initState() {
     super.initState();
     CardsBloc().getFromServer();
+  }
+
+  Future<bool> _confirmDelete(CardModel card) async {
+    return await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Eliminar o cartão ${card.brand} *${card.lastFour}."),
+            content:
+                const Text("Tem a certeza de que deseja eliminar este cartão?"),
+            actions: <Widget>[
+              FlatButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: const Text("Eliminar")),
+              FlatButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: const Text("Cancelar"),
+              ),
+            ],
+          );
+        });
+  }
+
+  Image _getImageByCardBrand(String brand) {
+    switch (brand.toLowerCase()) {
+      case "visa":
+        return Image.asset("assets/cards/visa.png");
+      case "mastercard":
+        return Image.asset("assets/cards/mastercard.png");
+      case "american express":
+        return Image.asset("assets/cards/amex.png");
+      case "diners club":
+        return Image.asset("assets/cards/diners.png");
+      case "discover":
+        return Image.asset("assets/cards/discovery.png");
+      case "jcb":
+        return Image.asset("assets/cards/jcb.png");
+      case "unionpay":
+        return Image.asset("assets/cards/union.png");
+      default:
+        return Image.asset("assets/cards/visa.png");
+    }
+  }
+
+  Widget removeBackground() {
+    return Padding(
+      padding: const EdgeInsets.only(right: 20.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          Icon(
+            Icons.delete,
+            color: Colors.red[300],
+          ),
+          Text(
+            "Remover",
+            style: TextStyle(color: Colors.red[300]),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -52,12 +98,23 @@ class _CardListState extends State<CardList> {
                   itemBuilder: (context, index) {
                     var card = snapshot.data[index];
 
-                    return Card(
-                        child: ListTile(
-                      leading: _getImageByCardBrand(card.brand),
-                      title: Text(card.cardHolder),
-                      subtitle: Text("*${card.lastFour}"),
-                    ));
+                    return Dismissible(
+                      key: ObjectKey(card),
+                      background: removeBackground(),
+                      direction: DismissDirection.endToStart,
+                      confirmDismiss: (direction) async {
+                        return await _confirmDelete(card);
+                      },
+                      child: Card(
+                          child: ListTile(
+                        leading: SizedBox(
+                          child: _getImageByCardBrand(card.brand),
+                          width: 80,
+                        ),
+                        title: Text(card.cardHolder),
+                        subtitle: Text("*${card.lastFour}"),
+                      )),
+                    );
                   });
             }));
   }
