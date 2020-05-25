@@ -197,11 +197,17 @@ class _ListViewerState extends State<ListViewer> {
           child: Image.asset("assets/barcode-icon.png", height: 32, width: 32),
           onPressed: () async {
             String barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-                "#FF0000", "Cancelar", true, ScanMode.DEFAULT);
+                "#FF0000", "Cancelar", false, ScanMode.BARCODE);
 
             print("BARCODE: $barcodeScanRes");
 
-            ProductsBloc().setReaded(barcodeScanRes);
+            if (barcodeScanRes != "-1") {
+              if (!ProductsBloc().setReaded(barcodeScanRes)) {
+                //show product notfound snackbar
+              }
+            } else {
+              // show snackbar
+            }
           });
     } else {
       return FloatingActionButton(
