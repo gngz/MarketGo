@@ -53,14 +53,17 @@ class ProductsBloc {
     return isUpdated;
   }
 
-  void setReaded(String ean) {
+  bool setReaded(String ean) {
     var product =
         _product.where((element) => element.ean.compareTo(ean) == 0).toList();
 
     if (product.length == 1) {
       product[0].readed = true;
       _productBlocController.sink.add(_product);
+      return true;
     }
+
+    return false;
   }
 
   void clear() {
