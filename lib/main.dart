@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:marketgo/views/CardList.dart';
+import 'package:marketgo/views/CategoryList.dart';
 import 'package:marketgo/views/MyLists.dart';
 import './views/login.dart';
 import './views/register.dart';
@@ -16,6 +17,7 @@ class MyApp extends StatelessWidget {
           '/register': (BuildContext context) => RegisterView(),
           '/listview': (BuildContext context) => MyListsView(),
           '/cards': (BuildContext context) => CardList(),
+          '/categoryview': (BuildContext context) => CategoryList()
         },
         theme: ThemeData(
           // This is the theme of your application.
