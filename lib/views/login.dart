@@ -15,7 +15,10 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  final logo = Image.asset("assets/logo.png");
+  final logo = Image.asset(
+    "assets/logo.png",
+    height: 50,
+  );
   final _formKey = GlobalKey<FormState>();
   final facebookLogin = FacebookLogin();
   String email;
