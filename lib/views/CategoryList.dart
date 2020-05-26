@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:marketgo/bloc/CategoryBloc.dart';
+import 'package:marketgo/config.dart';
 import 'package:marketgo/models/CategoryModel.dart';
 
 class CategoryList extends StatefulWidget {
@@ -19,6 +20,14 @@ class _CategoryListState extends State<CategoryList> {
     return Scaffold(
         appBar: AppBar(
           title: Text("Categorias"),
+          actions: <Widget>[
+            IconButton(
+                icon: const Icon(Icons.search),
+                tooltip: 'Procurar produto',
+                onPressed: () {
+                  showSearch(context: context, delegate: null);
+                }),
+          ],
         ),
         body: StreamBuilder<List<CategoryModel>>(
             stream: CategoryBloc().stream,
@@ -33,6 +42,10 @@ class _CategoryListState extends State<CategoryList> {
                     var category = snapshot.data[index];
 
                     return ListTile(
+                      leading: Image.network(
+                        "${Config().baseUrl}/${category.image}",
+                        height: 40,
+                      ),
                       title: Text(category.category),
                       trailing: Text("20 items"),
                     );
