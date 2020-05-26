@@ -77,22 +77,25 @@ class _AddCardViewState extends State<AddCardView> {
     return null;
   }
 
+  String leadingZeros(String string) {
+    return string.padLeft(2, "0");
+  }
+
   Widget drawCard(CardModel card) {
     return Container(
         height: 200,
         margin: EdgeInsets.all(10),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          boxShadow: [
-            BoxShadow(
-                color: Colors.black.withOpacity(0.5),
-                spreadRadius: 0,
-                blurRadius: 5,
-                offset: Offset(5, 5)),
-          ],
-          gradient:
-              LinearGradient(colors: [Color(0xFF434343), Color(0xFF211D1D)]),
-        ),
+            borderRadius: BorderRadius.circular(15),
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.black.withOpacity(0.5),
+                  spreadRadius: 0,
+                  blurRadius: 5,
+                  offset: Offset(5, 5)),
+            ],
+            gradient:
+                LinearGradient(colors: [Color(0xFF00508D), Color(0xFF0092DD)])),
         child: Stack(
           children: <Widget>[
             Positioned(
@@ -109,7 +112,7 @@ class _AddCardViewState extends State<AddCardView> {
                       ),
                     ),
                     Text(
-                      "  ${card.expMonth ?? DateTime.now().month.toString().padLeft(2, "0")}/${card.expYear ?? DateTime.now().year.toString().substring(2)}",
+                      "  ${leadingZeros(card.expMonth.toString()) ?? leadingZeros(DateTime.now().month.toString())}/${card.expYear ?? DateTime.now().year.toString().substring(2)}",
                       style: TextStyle(
                         color: Colors.white,
                       ),
@@ -129,7 +132,7 @@ class _AddCardViewState extends State<AddCardView> {
             ),
             Positioned(
               right: 10,
-              bottom: 0,
+              bottom: 10,
               height: 50,
               child: _getImageByCardBrand(card.brand ?? ""),
             ),
