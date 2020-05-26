@@ -108,7 +108,9 @@ class _MyListsViewState extends State<MyListsView> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      drawer: MenuDrawer(),
+      drawer: MenuDrawer(
+        selected: SELECTED_MENU.LISTS,
+      ),
       appBar: AppBar(
         backgroundColor: ColorDarkBlue,
         automaticallyImplyLeading: false,
