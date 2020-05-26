@@ -4,6 +4,7 @@ import 'package:marketgo/bloc/ProductsBloc.dart';
 import 'package:marketgo/models/ListModel.dart';
 import 'package:marketgo/models/Product.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:marketgo/views/CategoryList.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 class ListViewer extends StatefulWidget {
@@ -69,6 +70,7 @@ class _ListViewerState extends State<ListViewer> {
                       subtitle: Text(
                           "${_calculateTotal(products).toStringAsFixed(2)}€ ",
                           style: TextStyle(color: Colors.white)),
+                      trailing: _showPayButton(),
                     ),
                   ),
                   Expanded(
@@ -104,14 +106,17 @@ class _ListViewerState extends State<ListViewer> {
 
   Widget _productTile(Product product) {
     return ListTile(
-      leading: Image.network(product.image),
+      leading: SizedBox(
+        child: Image.network(product.image),
+        width: 56,
+      ),
       trailing: _getTrailingIcon(product),
       title: Text(product.name),
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text("Quantidade: ${product.quantity}"),
-          Text("Preço Unitário: ${product.price}€"),
+          Text("Preço Unitário: ${product.price.toStringAsFixed(2)}€"),
         ],
       ),
       onTap: () async {
@@ -241,8 +246,6 @@ class _ListViewerState extends State<ListViewer> {
           "assets/barcode-green.png",
           height: 32,
           width: 32,
-/*           color: Color.fromARGB(255, 0, 255, 0),
- */
         );
       }
       return Image.asset("assets/barcode-red.png",
@@ -253,6 +256,35 @@ class _ListViewerState extends State<ListViewer> {
   }
 
   _goCategoryListView() {
-    Navigator.pushReplacementNamed(context, "/categoryview");
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CategoryList(
+          list: this.widget.list,
+        ),
+      ),
+    );
   }
+
+  _showPayButton() {
+    if (_hasScannedProducts())
+      return RaisedButton(
+        onPressed: () {_doPayment()},
+                child: Text("PAGAR"),
+                color: Colors.white,
+                textColor: Color(0xff00AFD7),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              );
+          }
+        
+          bool _hasScannedProducts() {
+            for (var product in ProductsBloc().product) {
+              if (product.readed) return true;
+            }
+            return false;
+          }
+        
+          void _doPayment() {
+            
+          }
 }
