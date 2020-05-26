@@ -154,7 +154,7 @@ class _AddCardViewState extends State<AddCardView> {
           children: <Widget>[
             drawCard(card),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(10.0),
               child: TextFormField(
                 onChanged: (value) {
                   setState(() {
@@ -167,7 +167,7 @@ class _AddCardViewState extends State<AddCardView> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(10.0),
               child: TextFormField(
                 inputFormatters: [ccFormatter],
                 decoration: InputDecoration(
@@ -182,7 +182,7 @@ class _AddCardViewState extends State<AddCardView> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(10.0),
               child: TextFormField(
                   inputFormatters: [expFormatter],
                   decoration: InputDecoration(
@@ -212,7 +212,7 @@ class _AddCardViewState extends State<AddCardView> {
                   }),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(10.0),
               child: TextFormField(
                 inputFormatters: [cvcFormatter],
                 controller: cvcControler,
