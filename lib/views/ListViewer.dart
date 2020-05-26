@@ -38,7 +38,13 @@ class _ListViewerState extends State<ListViewer> {
       appBar: AppBar(
         backgroundColor: ColorDarkBlue,
         title: Text(widget.list.name),
-        actions: <Widget>[IconButton(icon: Icon(Icons.add), onPressed: () {})],
+        actions: <Widget>[
+          IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () {
+                _goCategoryListView();
+              })
+        ],
       ),
       body: StreamBuilder<List<Product>>(
           stream: ProductsBloc().stream,
@@ -241,5 +247,9 @@ class _ListViewerState extends State<ListViewer> {
     }
 
     return null;
+  }
+
+  _goCategoryListView() {
+    Navigator.pushReplacementNamed(context, "/categoryview");
   }
 }
