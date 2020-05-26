@@ -10,7 +10,10 @@ class RegisterView extends StatefulWidget {
 }
 
 class _RegisterViewState extends State<RegisterView> {
-  final logo = Image.asset("assets/logo.png");
+  final logo = Image.asset(
+    "assets/logo.png",
+    height: 50,
+  );
   static const secondary = const Color(0xff0088B4);
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
