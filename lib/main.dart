@@ -3,6 +3,7 @@ import 'package:marketgo/views/AboutUs.dart';
 import 'package:marketgo/views/CardList.dart';
 import 'package:marketgo/views/CategoryList.dart';
 import 'package:marketgo/views/MyLists.dart';
+import 'package:marketgo/views/PaymentList.dart';
 import 'package:marketgo/views/Payments.dart';
 import './views/login.dart';
 import './views/register.dart';
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
           '/categoryview': (BuildContext context) => CategoryList(),
           '/about': (BuildContext context) => AboutUs(),
           '/payments': (BuildContext context) => Payments(),
+          '/paymentslist': (BuildContext context) => PaymentList(),
         },
         theme: ThemeData(
           // This is the theme of your application.

@@ -118,7 +118,7 @@ class _CategoryListState extends State<CategoryList> {
                     leading: SizedBox(
                         child: Image.network(product.image), width: 56),
                     trailing: IconButton(
-                        icon: Icon(Icons.arrow_right), onPressed: null),
+                        icon: Icon(Icons.chevron_right), onPressed: null),
                     subtitle: Text("${product.price.toStringAsFixed(2)} €"),
                   ),
                 );
