@@ -24,4 +24,20 @@ class CardService {
       return null;
     }
   }
+
+  Future<bool> removeCard(String cardId) async {
+    try {
+      var response = await ApiService()
+          .getAuthHttp()
+          .delete("/cards/", data: {"id": cardId});
+
+      if (response.statusCode == 200) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
 }
