@@ -21,9 +21,9 @@ class Product {
       ean: json["ean"],
       name: json["name"],
       description: json["description"],
-      price: json["price"] as double,
+      price: json["price"].toDouble(),
       image: json["image"],
-      quantity: json["pivot"]["quantity"] as int,
+      quantity: json["pivot"] == null ? null : json["pivot"]["quantity"] as int,
     );
 
     return object;
