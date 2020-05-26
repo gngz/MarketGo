@@ -49,7 +49,10 @@ class AboutUs extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(10.0),
-            child: Text("Lorem ipsum dolet sit amet"),
+            child: Text(
+              "MarketGo é a aplicação mais recente do mercado que permite ir às compras de uma forma rápida e eficaz. Sem qualquer custo e  sem demoras, já pode preparar as suas listas em casa e começar a comprar.",
+              textAlign: TextAlign.justify,
+            ),
           )
         ],
       ),
