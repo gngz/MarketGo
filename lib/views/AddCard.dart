@@ -22,6 +22,8 @@ class AddCardView extends StatefulWidget {
 class _AddCardViewState extends State<AddCardView> {
   CardModel card = new CardModel();
 
+  get ColorDarkBlue => Color(0xFF0083B0);
+
   Widget _getImageByCardBrand(String brand) {
     switch (brand.toLowerCase()) {
       case "visa":
@@ -145,85 +147,87 @@ class _AddCardViewState extends State<AddCardView> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Adicionar Cartão"),
+        backgroundColor: ColorDarkBlue,
       ),
       body: Form(
-        child: Column(
+        child: ListView(
           children: <Widget>[
             drawCard(card),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: ListView(
-                  children: <Widget>[
-                    TextFormField(
-                      onChanged: (value) {
-                        setState(() {
-                          card.cardHolder = value;
-                        });
-                      },
-                      decoration: InputDecoration(
-                        labelText: "Titular do Cartão",
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    TextFormField(
-                      inputFormatters: [ccFormatter],
-                      decoration: InputDecoration(
-                        labelText: "Número do Cartão",
-                      ),
-                      onChanged: (value) {
-                        setState(() {
-                          card.lastFour = value;
-                          card.brand = getCardType(value);
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 10),
-                    TextFormField(
-                        inputFormatters: [expFormatter],
-                        decoration: InputDecoration(
-                          labelText: "Data de Vencimento",
-                        ),
-                        onChanged: (value) {
-                          print(value);
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextFormField(
+                onChanged: (value) {
+                  setState(() {
+                    card.cardHolder = value;
+                  });
+                },
+                decoration: InputDecoration(
+                  labelText: "Titular do Cartão",
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextFormField(
+                inputFormatters: [ccFormatter],
+                decoration: InputDecoration(
+                  labelText: "Número do Cartão",
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    card.lastFour = value;
+                    card.brand = getCardType(value);
+                  });
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextFormField(
+                  inputFormatters: [expFormatter],
+                  decoration: InputDecoration(
+                    labelText: "Data de Vencimento",
+                  ),
+                  onChanged: (value) {
+                    print(value);
 
-                          var splited = value.split("/");
+                    var splited = value.split("/");
 
-                          if (splited.length > 1) {
-                            print("contains!! ${splited[0]}");
-                            print(splited);
-                            var month = splited[0];
-                            var year = splited[1];
-                            setState(() {
-                              card.expMonth = int.parse(month);
-                              card.expYear = int.parse(year);
-                            });
-                          } else {
-                            setState(() {
-                              var month = splited[0];
-                              card.expMonth = int.parse(month);
-                              card.expYear = null;
-                            });
-                          }
-                        }),
-                    const SizedBox(height: 10),
-                    TextFormField(
-                      inputFormatters: [cvcFormatter],
-                      controller: cvcControler,
-                      decoration: InputDecoration(
-                        labelText: "CVC",
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                  ],
+                    if (splited.length > 1) {
+                      print("contains!! ${splited[0]}");
+                      print(splited);
+                      var month = splited[0];
+                      var year = splited[1];
+                      setState(() {
+                        card.expMonth = int.parse(month);
+                        card.expYear = int.parse(year);
+                      });
+                    } else {
+                      setState(() {
+                        var month = splited[0];
+                        card.expMonth = int.parse(month);
+                        card.expYear = null;
+                      });
+                    }
+                  }),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextFormField(
+                inputFormatters: [cvcFormatter],
+                controller: cvcControler,
+                decoration: InputDecoration(
+                  labelText: "CVC",
                 ),
               ),
             ),
           ],
         ),
       ),
-      floatingActionButton:
-          FloatingActionButton(onPressed: () {}, child: Icon(Icons.done)),
+      floatingActionButton: FloatingActionButton(
+          backgroundColor: ColorDarkBlue,
+          onPressed: () {},
+          child: Icon(Icons.done)),
     );
   }
 }
