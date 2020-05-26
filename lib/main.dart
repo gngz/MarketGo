@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
         title: 'MarketGo',
         routes: {
           '/register': (BuildContext context) => RegisterView(),
-          '/listview': (BuildContext context) => MyListsView(),
+          '/lists': (BuildContext context) => MyListsView(),
           '/cards': (BuildContext context) => CardList(),
           '/categoryview': (BuildContext context) => CategoryList()
         },
