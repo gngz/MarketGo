@@ -63,16 +63,19 @@ class ProductsBloc {
       _productBlocController.sink.add(_product);
       return true;
     } else {
-      var newProduct = await ListService().addProductByEan(ean, listId, 1);
-      if (newProduct != null) {
-        newProduct.readed = true;
-        newProduct.quantity = 1;
-        _product.add(newProduct);
-        _productBlocController.sink.add(_product);
-        return true;
-      }
+      return await addProduct(ean, listId);
     }
+  }
 
+  Future<bool> addProduct(String ean, int listId) async {
+    var newProduct = await ListService().addProductByEan(ean, listId, 1);
+    if (newProduct != null) {
+      newProduct.readed = true;
+      newProduct.quantity = 1;
+      _product.add(newProduct);
+      _productBlocController.sink.add(_product);
+      return true;
+    }
     return false;
   }
 
