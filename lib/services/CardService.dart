@@ -40,4 +40,24 @@ class CardService {
       return false;
     }
   }
+
+  Future<CardModel> addCard(CardModel card) async {
+    try {
+      var response = await ApiService().getAuthHttp().post("/cards/", data: {
+        "name": card.cardHolder,
+        "card_number": card.lastFour,
+        "exp_month": card.expMonth,
+        "exp_year": card.expYear,
+        "cvc": card.cvc,
+      });
+
+      if (response.statusCode == 201) {
+        return CardModel.fromJson(response.data);
+      }
+      return null;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
 }
