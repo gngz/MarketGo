@@ -2,15 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:marketgo/bloc/CardsBloc.dart';
 import 'package:marketgo/models/CardModel.dart';
+import 'package:marketgo/views/AddCard.dart';
 
 class CardList extends StatefulWidget {
   @override
   _CardListState createState() => _CardListState();
 }
 
-void _addCard() {}
-
 class _CardListState extends State<CardList> {
+  void _addCard() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => AddCardView()));
+  }
+
   @override
   void initState() {
     super.initState();
