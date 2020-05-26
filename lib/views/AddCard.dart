@@ -9,8 +9,6 @@ final cvcFormatter =
 final expFormatter =
     new MaskTextInputFormatter(mask: '##/##', filter: {"#": RegExp(r'[0-9]')});
 
-final cvcControler = TextEditingController();
-
 final ccFormatter = new MaskTextInputFormatter(
     mask: "#### #### #### ####", filter: {"#": RegExp(r'[0-9]')});
 
@@ -41,6 +39,24 @@ class _AddCardViewState extends State<AddCardView> {
       default:
         return const SizedBox();
     }
+  }
+
+  bool creditCardValid(String cardNumber) {
+    final visa = RegExp(r"^4[0-9]{12}(?:[0-9]{3})?$");
+    final mastercard = RegExp(
+        r"^(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}$");
+
+    final amex = RegExp(r"^3[47][0-9]{13}$");
+    final diners = RegExp(r"^3(?:0[0-5]|[68][0-9])[0-9]{11}$");
+    final discover = RegExp(r"^6(?:011|5[0-9]{2})[0-9]{12}$");
+    final jcb = RegExp(r"^(?:2131|1800|35\d{3})\d{11}$");
+
+    return visa.hasMatch(cardNumber) ||
+        mastercard.hasMatch(cardNumber) ||
+        amex.hasMatch(cardNumber) ||
+        diners.hasMatch(cardNumber) ||
+        discover.hasMatch(cardNumber) ||
+        jcb.hasMatch(cardNumber);
   }
 
   String getCardType(String cardNumber) {
@@ -80,6 +96,7 @@ class _AddCardViewState extends State<AddCardView> {
   }
 
   String leadingZeros(String string) {
+    if (string == null) return null;
     return string.padLeft(2, "0");
   }
 
@@ -114,7 +131,7 @@ class _AddCardViewState extends State<AddCardView> {
                       ),
                     ),
                     Text(
-                      "  ${leadingZeros(card.expMonth.toString()) ?? leadingZeros(DateTime.now().month.toString())}/${card.expYear ?? DateTime.now().year.toString().substring(2)}",
+                      "  ${leadingZeros(card.expMonth?.toString()) ?? leadingZeros(DateTime.now().month.toString())}/${card.expYear ?? DateTime.now().year.toString().substring(2)}",
                       style: TextStyle(
                         color: Colors.white,
                       ),
@@ -142,6 +159,8 @@ class _AddCardViewState extends State<AddCardView> {
         ));
   }
 
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -150,12 +169,18 @@ class _AddCardViewState extends State<AddCardView> {
         backgroundColor: ColorDarkBlue,
       ),
       body: Form(
+        key: _formKey,
         child: ListView(
           children: <Widget>[
             drawCard(card),
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: TextFormField(
+                validator: (value) {
+                  if (value.isEmpty)
+                    return "Tem de introduzir o nome do titular do cartão.";
+                  return null;
+                },
                 onChanged: (value) {
                   setState(() {
                     card.cardHolder = value;
@@ -170,6 +195,15 @@ class _AddCardViewState extends State<AddCardView> {
               padding: const EdgeInsets.all(10.0),
               child: TextFormField(
                 inputFormatters: [ccFormatter],
+                validator: (value) {
+                  if (value.isEmpty)
+                    return "Tem de introduzir um número de cartão de crédito.";
+
+                  if (!creditCardValid(ccFormatter.getUnmaskedText()))
+                    return "Tem de introduzir um número de cartão de crédito válido";
+
+                  return null;
+                },
                 decoration: InputDecoration(
                   labelText: "Número do Cartão",
                 ),
@@ -185,6 +219,20 @@ class _AddCardViewState extends State<AddCardView> {
               padding: const EdgeInsets.all(10.0),
               child: TextFormField(
                   inputFormatters: [expFormatter],
+                  validator: (value) {
+                    if (value.isEmpty)
+                      return "Tem de introduzir uma data de expiração.";
+
+                    var date = DateTime.now();
+                    var expDate =
+                        DateTime(card.expYear + 2000, card.expMonth + 1)
+                            .subtract(Duration(days: 1));
+
+                    print(expDate);
+
+                    if (expDate.isBefore(date))
+                      return "Tem de introduzir uma data de expiração posterior ao dia de hoje.";
+                  },
                   decoration: InputDecoration(
                     labelText: "Data de Vencimento",
                   ),
@@ -215,7 +263,13 @@ class _AddCardViewState extends State<AddCardView> {
               padding: const EdgeInsets.all(10.0),
               child: TextFormField(
                 inputFormatters: [cvcFormatter],
-                controller: cvcControler,
+                validator: (value) {
+                  if (value.isEmpty) return "Tem de introduzir o CVC.";
+                  if (value.length < 3)
+                    return "O CVC é composto por três dígitos.";
+
+                  return null;
+                },
                 decoration: InputDecoration(
                   labelText: "CVC",
                 ),
@@ -226,7 +280,9 @@ class _AddCardViewState extends State<AddCardView> {
       ),
       floatingActionButton: FloatingActionButton(
           backgroundColor: ColorDarkBlue,
-          onPressed: () {},
+          onPressed: () {
+            _formKey.currentState.validate();
+          },
           child: Icon(Icons.done)),
     );
   }
