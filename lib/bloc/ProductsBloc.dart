@@ -63,14 +63,14 @@ class ProductsBloc {
       _productBlocController.sink.add(_product);
       return true;
     } else {
-      return await addProduct(ean, listId);
+      return await addProduct(ean, listId, readed: true);
     }
   }
 
-  Future<bool> addProduct(String ean, int listId) async {
+  Future<bool> addProduct(String ean, int listId, {readed: false}) async {
     var newProduct = await ListService().addProductByEan(ean, listId, 1);
     if (newProduct != null) {
-      newProduct.readed = true;
+      newProduct.readed = readed;
       newProduct.quantity = 1;
       _product.add(newProduct);
       _productBlocController.sink.add(_product);
