@@ -5,6 +5,7 @@ class CardModel {
   int expYear;
   String lastFour;
   String cardHolder;
+  int cvc;
 
   CardModel({
     this.id,
@@ -13,6 +14,7 @@ class CardModel {
     this.expYear,
     this.lastFour,
     this.cardHolder,
+    this.cvc,
   });
 
   static List<CardModel> fromList(List json) {
