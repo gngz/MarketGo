@@ -106,6 +106,14 @@ class _CardListState extends State<CardList> {
           if (!snapshot.hasData)
             return Center(child: CircularProgressIndicator());
 
+          if (snapshot.data.length == 0)
+            return Center(
+              child: Text(
+                "Não possui nenhum cartão de pagamentos.",
+                style: TextStyle(color: Colors.grey),
+              ),
+            );
+
           return ListView.builder(
               itemCount: snapshot.data.length,
               itemBuilder: (context, index) {
