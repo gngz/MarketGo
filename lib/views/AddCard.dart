@@ -1,16 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:marketgo/bloc/CardsBloc.dart';
 import 'package:marketgo/models/CardModel.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-
-final cvcFormatter =
-    new MaskTextInputFormatter(mask: '###', filter: {"#": RegExp(r'[0-9]')});
-
-final expFormatter =
-    new MaskTextInputFormatter(mask: '##/##', filter: {"#": RegExp(r'[0-9]')});
-
-final ccFormatter = new MaskTextInputFormatter(
-    mask: "#### #### #### ####", filter: {"#": RegExp(r'[0-9]')});
 
 class AddCardView extends StatefulWidget {
   @override
@@ -19,6 +11,15 @@ class AddCardView extends StatefulWidget {
 
 class _AddCardViewState extends State<AddCardView> {
   CardModel card = new CardModel();
+
+  final cvcFormatter =
+      new MaskTextInputFormatter(mask: '###', filter: {"#": RegExp(r'[0-9]')});
+
+  final expFormatter = new MaskTextInputFormatter(
+      mask: '##/##', filter: {"#": RegExp(r'[0-9]')});
+
+  final ccFormatter = new MaskTextInputFormatter(
+      mask: "#### #### #### ####", filter: {"#": RegExp(r'[0-9]')});
 
   get ColorDarkBlue => Color(0xFF0083B0);
 
@@ -66,7 +67,10 @@ class _AddCardViewState extends State<AddCardView> {
       "brand": "diners club"
     };
     final discoverCard = {"regex": RegExp(r"^6(?:011|5)"), "brand": "discover"};
-    final jcbCard = {"regex": RegExp(r":^(?:2131|1800|35)"), "brand": "jcb"};
+    final jcbCard = {
+      "regex": RegExp(r":^(?:2131|1800|35\d{3})"),
+      "brand": "jcb"
+    };
     final masterCard = {
       "regex": RegExp(
           r"^(?:5[1-5]|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)"),
@@ -264,11 +268,17 @@ class _AddCardViewState extends State<AddCardView> {
               child: TextFormField(
                 inputFormatters: [cvcFormatter],
                 validator: (value) {
-                  if (value.isEmpty) return "Tem de introduzir o CVC.";
-                  if (value.length < 3)
-                    return "O CVC é composto por três dígitos.";
-
+                  var val = cvcFormatter.getUnmaskedText();
+                  if (val.isEmpty) return "Tem de introduzir um CVC.";
+                  if (val.length < 3)
+                    return "Tem de introduzir um CVC com 3 dígitos.";
                   return null;
+                },
+                onChanged: (value) {
+                  print(value);
+                  setState(() {
+                    card.cvc = value as int;
+                  });
                 },
                 decoration: InputDecoration(
                   labelText: "CVC",
@@ -280,8 +290,13 @@ class _AddCardViewState extends State<AddCardView> {
       ),
       floatingActionButton: FloatingActionButton(
           backgroundColor: ColorDarkBlue,
-          onPressed: () {
-            _formKey.currentState.validate();
+          onPressed: () async {
+            if (_formKey.currentState.validate()) {
+              if (await CardsBloc().addCard(card)) {
+                _formKey.currentState.reset();
+                Navigator.pop(context);
+              }
+            }
           },
           child: Icon(Icons.done)),
     );
