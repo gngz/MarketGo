@@ -40,6 +40,7 @@ class _ListViewerState extends State<ListViewer> {
         title: Text(widget.list.name),
         actions: <Widget>[
           IconButton(
+              tooltip: "Adicionar Produto",
               icon: Icon(Icons.add),
               onPressed: () {
                 _goCategoryListView();
@@ -200,6 +201,7 @@ class _ListViewerState extends State<ListViewer> {
   Widget _getFAB() {
     if (isShopMode) {
       return FloatingActionButton(
+          tooltip: "Scan de Produto",
           child: Image.asset("assets/barcode-icon.png", height: 32, width: 32),
           onPressed: () async {
             String barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
@@ -222,6 +224,7 @@ class _ListViewerState extends State<ListViewer> {
           });
     } else {
       return FloatingActionButton(
+          tooltip: "Iniciar Compra",
           child: FaIcon(FontAwesomeIcons.shoppingCart),
           onPressed: () {
             setState(() {

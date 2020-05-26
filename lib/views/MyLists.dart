@@ -197,10 +197,9 @@ class _MyListsViewState extends State<MyListsView> {
             ],
           )),
       floatingActionButton: FloatingActionButton(
-          //TODO EXTEIORIZE
+          tooltip: "Adicionar Lista",
           backgroundColor: ColorDarkBlue,
           onPressed: () => {_showInputDialog()},
-          tooltip: "A new button",
           child: Icon(Icons.add)),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );

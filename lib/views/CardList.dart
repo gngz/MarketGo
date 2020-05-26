@@ -146,6 +146,7 @@ class _CardListState extends State<CardList> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: ColorDarkBlue,
         onPressed: _addCard,
+        tooltip: "Adicionar Cartão",
         child: Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
