@@ -27,6 +27,17 @@ class CardsBloc {
     _listBlocController.sink.add(cards);
   }
 
+  Future<bool> removeCard(CardModel card) async {
+    var removed = await CardService().removeCard(card.id);
+    if (removed) {
+      cards.remove(card);
+      _listBlocController.sink.add(cards);
+      return true;
+    }
+
+    return false;
+  }
+
   void dispose() {
     _listBlocController.close();
   }
