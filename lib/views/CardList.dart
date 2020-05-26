@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:marketgo/bloc/CardsBloc.dart';
+import 'package:marketgo/components/MenuDrawer.dart';
 import 'package:marketgo/models/CardModel.dart';
 import 'package:marketgo/views/AddCard.dart';
 
@@ -10,6 +11,8 @@ class CardList extends StatefulWidget {
 }
 
 class _CardListState extends State<CardList> {
+  get ColorDarkBlue => Color(0xFF0083B0);
+
   void _addCard() {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => AddCardView()));
@@ -82,44 +85,79 @@ class _CardListState extends State<CardList> {
     );
   }
 
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("Cartões de Pagamento"),
-          actions: <Widget>[
-            IconButton(icon: Icon(Icons.add), onPressed: _addCard)
-          ],
-        ),
-        body: StreamBuilder<List<CardModel>>(
-            stream: CardsBloc().stream,
-            initialData: CardsBloc().cards,
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) return CircularProgressIndicator();
+      key: _scaffoldKey,
+      drawer: MenuDrawer(
+        selected: SELECTED_MENU.CARDS,
+      ),
+      appBar: AppBar(
+        backgroundColor: ColorDarkBlue,
+        automaticallyImplyLeading: false,
+        title: Text("Cartões de Pagamento"),
+      ),
+      body: StreamBuilder<List<CardModel>>(
+        stream: CardsBloc().stream,
+        initialData: CardsBloc().cards,
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            return Center(child: CircularProgressIndicator());
 
-              return ListView.builder(
-                  itemCount: snapshot.data.length,
-                  itemBuilder: (context, index) {
-                    var card = snapshot.data[index];
+          return ListView.builder(
+              itemCount: snapshot.data.length,
+              itemBuilder: (context, index) {
+                var card = snapshot.data[index];
 
-                    return Dismissible(
-                      key: ObjectKey(card),
-                      background: removeBackground(),
-                      direction: DismissDirection.endToStart,
-                      confirmDismiss: (direction) async {
-                        return await _confirmDelete(card);
-                      },
-                      child: Card(
-                          child: ListTile(
-                        leading: SizedBox(
-                          child: _getImageByCardBrand(card.brand),
-                          width: 80,
-                        ),
-                        title: Text(card.cardHolder),
-                        subtitle: Text("*${card.lastFour}"),
-                      )),
-                    );
-                  });
-            }));
+                return Dismissible(
+                  key: ObjectKey(card),
+                  background: removeBackground(),
+                  direction: DismissDirection.endToStart,
+                  confirmDismiss: (direction) async {
+                    var confirm = await _confirmDelete(card);
+                    if (confirm) {
+                      return await CardsBloc().removeCard(card);
+                    }
+                    return false;
+                  },
+                  child: Card(
+                      child: ListTile(
+                    leading: SizedBox(
+                      child: _getImageByCardBrand(card.brand),
+                      width: 80,
+                    ),
+                    title: Text(card.cardHolder),
+                    subtitle: Text("*${card.lastFour}"),
+                  )),
+                );
+              });
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: ColorDarkBlue,
+        onPressed: _addCard,
+        child: Icon(Icons.add),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      bottomNavigationBar: BottomAppBar(
+          shape: const CircularNotchedRectangle(),
+          color: ColorDarkBlue,
+          child: Row(
+            children: <Widget>[
+              IconButton(
+                color: Colors.white,
+                icon: Icon(Icons.menu),
+                tooltip: "Menu",
+                onPressed: () => {_openDrawer()},
+              )
+            ],
+          )),
+    );
+  }
+
+  _openDrawer() {
+    _scaffoldKey.currentState.openDrawer();
   }
 }
