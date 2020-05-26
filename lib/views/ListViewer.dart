@@ -202,11 +202,15 @@ class _ListViewerState extends State<ListViewer> {
             print("BARCODE: $barcodeScanRes");
 
             if (barcodeScanRes != "-1") {
-              if (await ProductsBloc()
-                  .setReaded(barcodeScanRes, widget.list.id)) {
-                _showSnackBar("Produto adicionado com sucesso");
-              } else {
-                _showSnackBar("O produto não está disponível!");
+              try {
+                if (await ProductsBloc()
+                    .setReaded(barcodeScanRes, widget.list.id)) {
+                  _showSnackBar("Produto adicionado com sucesso");
+                } else {
+                  _showSnackBar("O produto não está disponível!");
+                }
+              } catch (e) {
+                _showSnackBar("O produto já está no carrinho");
               }
             } else {}
           });
