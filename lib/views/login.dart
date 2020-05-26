@@ -44,7 +44,7 @@ class _LoginViewState extends State<LoginView> {
   }
 
   _goListView() {
-    Navigator.pushReplacementNamed(context, "/listview");
+    Navigator.pushReplacementNamed(context, "/lists");
   }
 
   _facebookHandler() async {
