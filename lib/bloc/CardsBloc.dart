@@ -6,7 +6,7 @@ import 'package:marketgo/services/CardService.dart';
 class CardsBloc {
   static final CardsBloc _singleton = CardsBloc._internal();
 
-  List<CardModel> cards;
+  List<CardModel> cards = new List<CardModel>();
 
   factory CardsBloc() {
     return _singleton;
@@ -23,8 +23,10 @@ class CardsBloc {
 
   void getFromServer() async {
     var cards = await CardService().getCards();
-    this.cards = cards;
-    _listBlocController.sink.add(cards);
+    if (cards != null) {
+      this.cards = cards;
+      _listBlocController.sink.add(cards);
+    }
   }
 
   Future<bool> removeCard(CardModel card) async {
