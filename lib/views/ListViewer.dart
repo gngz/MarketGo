@@ -269,22 +269,22 @@ class _ListViewerState extends State<ListViewer> {
   _showPayButton() {
     if (_hasScannedProducts())
       return RaisedButton(
-        onPressed: () {_doPayment()},
-                child: Text("PAGAR"),
-                color: Colors.white,
-                textColor: Color(0xff00AFD7),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-              );
-          }
-        
-          bool _hasScannedProducts() {
-            for (var product in ProductsBloc().product) {
-              if (product.readed) return true;
-            }
-            return false;
-          }
-        
-          void _doPayment() {
-            
-          }
+        onPressed: () {
+          _doPayment();
+        },
+        child: Text("PAGAR"),
+        color: Colors.white,
+        textColor: Color(0xff00AFD7),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      );
+  }
+
+  bool _hasScannedProducts() {
+    for (var product in ProductsBloc().product) {
+      if (product.readed) return true;
+    }
+    return false;
+  }
+
+  void _doPayment() {}
 }
