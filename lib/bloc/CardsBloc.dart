@@ -40,6 +40,18 @@ class CardsBloc {
     return false;
   }
 
+  Future<bool> addCard(CardModel card) async {
+    var createdCard = await CardService().addCard(card);
+
+    if (createdCard != null) {
+      cards.add(createdCard);
+      _listBlocController.sink.add(cards);
+      return true;
+    }
+
+    return false;
+  }
+
   void dispose() {
     _listBlocController.close();
   }
