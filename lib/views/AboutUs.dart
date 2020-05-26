@@ -24,18 +24,35 @@ class AboutUs extends StatelessWidget {
         backgroundColor: ColorDarkBlue,
       ),
       bottomNavigationBar: BottomAppBar(
-          shape: const CircularNotchedRectangle(),
-          color: ColorDarkBlue,
-          child: Row(
-            children: <Widget>[
-              IconButton(
-                color: Colors.white,
-                icon: Icon(Icons.menu),
-                tooltip: "Menu",
-                onPressed: () => {_openDrawer()},
-              )
-            ],
-          )),
+        shape: const CircularNotchedRectangle(),
+        color: ColorDarkBlue,
+        child: Row(
+          children: <Widget>[
+            IconButton(
+              color: Colors.white,
+              icon: Icon(Icons.menu),
+              tooltip: "Menu",
+              onPressed: () => {_openDrawer()},
+            )
+          ],
+        ),
+      ),
+      body: ListView(
+        children: <Widget>[
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 10.0, vertical: 30.0),
+            child: Image.asset(
+              "assets/logo.png",
+              height: 50,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Text("Lorem ipsum dolet sit amet"),
+          )
+        ],
+      ),
     );
   }
 }
