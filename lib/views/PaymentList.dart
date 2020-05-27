@@ -29,27 +29,6 @@ class _PaymentListState extends State<PaymentList> {
     CardsBloc().getFromServer();
   }
 
-  Future<bool> _confirmDelete(CardModel card) async {
-    return await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("Eliminar o cartão ${card.brand} *${card.lastFour}."),
-            content:
-                const Text("Tem a certeza de que deseja eliminar este cartão?"),
-            actions: <Widget>[
-              FlatButton(
-                  onPressed: () => Navigator.of(context).pop(true),
-                  child: const Text("Eliminar")),
-              FlatButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: const Text("Cancelar"),
-              ),
-            ],
-          );
-        });
-  }
-
   Image _getImageByCardBrand(String brand) {
     switch (brand.toLowerCase()) {
       case "visa":
@@ -69,25 +48,6 @@ class _PaymentListState extends State<PaymentList> {
       default:
         return Image.asset("assets/cards/visa.png");
     }
-  }
-
-  Widget removeBackground() {
-    return Padding(
-      padding: const EdgeInsets.only(right: 20.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          Icon(
-            Icons.delete,
-            color: Colors.red[300],
-          ),
-          Text(
-            "Remover",
-            style: TextStyle(color: Colors.red[300]),
-          ),
-        ],
-      ),
-    );
   }
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
@@ -120,31 +80,19 @@ class _PaymentListState extends State<PaymentList> {
               itemBuilder: (context, index) {
                 var card = snapshot.data[index];
 
-                return Dismissible(
-                  key: ObjectKey(card),
-                  background: removeBackground(),
-                  direction: DismissDirection.endToStart,
-                  confirmDismiss: (direction) async {
-                    var confirm = await _confirmDelete(card);
-                    if (confirm) {
-                      return await CardsBloc().removeCard(card);
-                    }
-                    return false;
+                return Card(
+                    child: ListTile(
+                  leading: SizedBox(
+                    child: _getImageByCardBrand(card.brand),
+                    width: 80,
+                  ),
+                  title: Text(card.cardHolder),
+                  subtitle: Text("*${card.lastFour}"),
+                  trailing: Icon(Icons.chevron_right),
+                  onTap: () {
+                    _doPayment(card);
                   },
-                  child: Card(
-                      child: ListTile(
-                    leading: SizedBox(
-                      child: _getImageByCardBrand(card.brand),
-                      width: 80,
-                    ),
-                    title: Text(card.cardHolder),
-                    subtitle: Text("*${card.lastFour}"),
-                    trailing: Icon(Icons.chevron_right),
-                    onTap: () {
-                      _doPayment(card);
-                    },
-                  )),
-                );
+                ));
               });
         },
       ),
