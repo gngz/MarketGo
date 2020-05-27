@@ -7,6 +7,10 @@ import 'package:marketgo/services/Lists/ListService.dart';
 import 'ListViewer.dart';
 
 class MyListsView extends StatefulWidget {
+  final SnackBar snackbar;
+
+  MyListsView({this.snackbar});
+
   @override
   _MyListsViewState createState() => _MyListsViewState();
 }
@@ -17,6 +21,13 @@ class _MyListsViewState extends State<MyListsView> {
   void initState() {
     super.initState();
     ListsBloc().getListFromServer();
+
+    if (widget.snackbar != null) {
+      new Future<void>.delayed(Duration.zero, () {
+        print("EXECUTANDO SNACABARE");
+        _scaffoldKey.currentState.showSnackBar(widget.snackbar);
+      });
+    }
   }
 
   _addList(String name) async {
