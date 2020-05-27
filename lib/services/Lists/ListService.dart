@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:marketgo/bloc/UserBloc.dart';
 import 'package:marketgo/models/ListModel.dart';
 import 'package:marketgo/models/Product.dart';
 import 'package:marketgo/services/ApiService.dart';
@@ -14,9 +13,8 @@ class ListService {
   }
 
   Future<List<ListModel>> getUserLists() async {
-    var token = UserBloc().user.token;
     var response = await ApiService().getAuthHttp().get("/list");
-    print(response); //TODO try catrch
+    print(response);
     List<ListModel> list;
     try {
       list = ListModel.fromList(response.data);
@@ -27,7 +25,6 @@ class ListService {
     return list;
   }
 
-  // TODO SOME shit
   Future<List<Product>> getProducts(int id) async {
     var response = await ApiService().getAuthHttp().get("/list/$id/products/");
 
@@ -39,11 +36,10 @@ class ListService {
   }
 
   Future<ListModel> addUserList(ListModel listModel) async {
-    var token = UserBloc().user.token;
     var response = await ApiService()
         .getAuthHttp()
         .post("/list", data: {"name": listModel.name});
-    //TODO try catch
+
     ListModel list;
     try {
       list = ListModel.fromJson(response.data);

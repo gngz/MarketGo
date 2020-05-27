@@ -5,7 +5,6 @@ import 'package:marketgo/components/MenuDrawer.dart';
 import 'package:marketgo/models/CardModel.dart';
 import 'package:marketgo/models/ListModel.dart';
 import 'package:marketgo/models/Product.dart';
-import 'package:marketgo/services/ApiService.dart';
 import 'package:marketgo/services/CardService.dart';
 import 'package:marketgo/views/AddCard.dart';
 

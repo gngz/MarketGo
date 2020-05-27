@@ -124,10 +124,6 @@ class _LoginViewState extends State<LoginView> {
 
   static const secondary = const Color(0xff0088B4);
 
-  // @Manel what is this?
-  static final underlineTextField =
-      UnderlineInputBorder(borderSide: BorderSide(color: secondary));
-
   // Email Field
   Widget emailField() {
     return TextFormField(

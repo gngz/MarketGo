@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:marketgo/bloc/ListsBloc.dart';
-import 'package:marketgo/bloc/ProductsBloc.dart';
-import 'package:marketgo/bloc/UserBloc.dart';
 import 'package:marketgo/components/MenuDrawer.dart';
 import 'package:marketgo/models/ListModel.dart';
-import 'package:marketgo/models/User.dart';
-import 'package:marketgo/services/Auth/Auth.dart';
 import 'package:marketgo/services/Lists/ListService.dart';
 
 import 'ListViewer.dart';
