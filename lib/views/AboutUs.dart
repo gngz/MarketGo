@@ -53,6 +53,29 @@ class AboutUs extends StatelessWidget {
               "MarketGo é a aplicação mais recente do mercado que permite ir às compras de uma forma rápida e eficaz. Sem qualquer custo e  sem demoras, já pode preparar as suas listas em casa e começar a comprar.",
               textAlign: TextAlign.justify,
             ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Text(
+              "Projeto realizado no âmbito da cadeira Arquiteturas de Software para Interfaces de Utilizador, do mestrado de Engenharia Informática, na Universidade da Madeira.",
+              textAlign: TextAlign.justify,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: RichText(
+              text: TextSpan(
+                  style: TextStyle(color: Colors.black),
+                  children: <TextSpan>[
+                    TextSpan(
+                        text: "Programadores: \n\n",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(
+                        text: "Gonçalo Passos - 2030415@student.uma.pt \n"),
+                    TextSpan(text: "Manel Pereira - 2043916@student.uma.pt \n"),
+                    TextSpan(text: "Nuno Velosa - 2043816@student.uma.pt\n"),
+                  ]),
+            ),
           )
         ],
       ),
