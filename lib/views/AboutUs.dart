@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:marketgo/components/MenuDrawer.dart';
 
 class AboutUs extends StatelessWidget {
-  get ColorDarkBlue => Color(0xFF0083B0);
+  static const ColorDarkBlue = Color(0xFF0083B0);
 
   _openDrawer() {
     _scaffoldKey.currentState.openDrawer();

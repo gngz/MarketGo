@@ -18,7 +18,7 @@ class PaymentList extends StatefulWidget {
 }
 
 class _PaymentListState extends State<PaymentList> {
-  get ColorDarkBlue => Color(0xFF0083B0);
+  static const ColorDarkBlue = Color(0xFF0083B0);
 
   void _addCard() {
     Navigator.push(

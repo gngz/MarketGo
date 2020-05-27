@@ -18,8 +18,8 @@ class CategoryList extends StatefulWidget {
 }
 
 class _CategoryListState extends State<CategoryList> {
-  final ColorDarkBlue = Color(0xFF0083B0); //TODO COLOCAR NUMA STATIC class
-  final ColorLightBlue = Color(0xFF000B4DB);
+  static const ColorDarkBlue = Color(0xFF0083B0);
+
   int selectedCategory = -1;
   bool searchMode = false;
   String searchQuery = "";
@@ -201,5 +201,3 @@ class _CategoryListState extends State<CategoryList> {
     );
   }
 }
-
-class _searchField {}

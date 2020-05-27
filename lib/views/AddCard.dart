@@ -21,7 +21,7 @@ class _AddCardViewState extends State<AddCardView> {
   final ccFormatter = new MaskTextInputFormatter(
       mask: "#### #### #### ####", filter: {"#": RegExp(r'[0-9]')});
 
-  get ColorDarkBlue => Color(0xFF0083B0);
+  static const ColorDarkBlue = Color(0xFF0083B0);
 
   Widget _getImageByCardBrand(String brand) {
     switch (brand.toLowerCase()) {

@@ -8,7 +8,7 @@ class Payments extends StatefulWidget {
 }
 
 class _PaymentsState extends State<Payments> {
-  get ColorDarkBlue => Color(0xFF0083B0);
+  static const ColorDarkBlue = Color(0xFF0083B0);
 
   _openDrawer() {
     _scaffoldKey.currentState.openDrawer();

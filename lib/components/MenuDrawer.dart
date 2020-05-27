@@ -20,7 +20,7 @@ class MenuDrawer extends StatefulWidget {
 }
 
 class _MenuDrawerState extends State<MenuDrawer> {
-  get ColorDarkBlue => Color(0xFF0083B0);
+  static const ColorDarkBlue = Color(0xFF0083B0);
 
   Widget _getAvatar(avatar) {
     if (avatar != null) {

@@ -18,8 +18,8 @@ class ListViewer extends StatefulWidget {
 }
 
 class _ListViewerState extends State<ListViewer> {
-  final ColorDarkBlue = Color(0xFF0083B0);
-  final ColorLightBlue = Color(0xFF000B4DB);
+  static const ColorDarkBlue = Color(0xFF0083B0);
+  static const ColorLightBlue = Color(0xFF000B4DB);
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 

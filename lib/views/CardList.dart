@@ -11,7 +11,7 @@ class CardList extends StatefulWidget {
 }
 
 class _CardListState extends State<CardList> {
-  get ColorDarkBlue => Color(0xFF0083B0);
+  static const ColorDarkBlue = Color(0xFF0083B0);
 
   void _addCard() {
     Navigator.push(
