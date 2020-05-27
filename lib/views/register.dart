@@ -132,14 +132,19 @@ class _RegisterViewState extends State<RegisterView> {
       registerDTO.lastName = _lastName;
       registerDTO.email = _email;
       registerDTO.password = _password;
+      _showLoadingDialog();
+
       try {
         var response = await Auth.register(registerDTO);
+        Navigator.pop(context);
         _goListView();
       } on RegisterException catch (e) {
+        Navigator.pop(context);
         if (e.validation == Validation.unique) {
           _showSnackBar("Já existe um utilizador com este email");
         }
       } catch (e) {
+        Navigator.pop(context);
         print(e);
       }
     }
@@ -207,5 +212,16 @@ class _RegisterViewState extends State<RegisterView> {
             ),
           ),
         ));
+  }
+
+  void _showLoadingDialog() {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        });
   }
 }
