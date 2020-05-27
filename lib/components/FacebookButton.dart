@@ -10,17 +10,16 @@ class FacebookButton extends StatefulWidget {
 }
 
 class _FacebookButtonState extends State<FacebookButton> {
-  SocialButton _socialButton = new SocialButton();
+  static const BackgroundColor = Color(0xFF45639E);
 
   @override
   Widget build(BuildContext context) {
-    _socialButton.text = "Login com Facebook";
-    _socialButton.color = Color(0xFF45639E);
-    _socialButton.textColor = Colors.white;
-    _socialButton.icon =
-        Image(image: AssetImage("assets/facebook_logo.png"), height: 15.0);
-    _socialButton.onPressed = widget.onPressed;
-
-    return _socialButton;
+    return new SocialButton(
+      text: "Login com Facebook",
+      color: BackgroundColor,
+      textColor: Colors.white,
+      icon: Image(image: AssetImage("assets/facebook_logo.png"), height: 15.0),
+      onPressed: this.widget.onPressed,
+    );
   }
 }

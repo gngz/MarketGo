@@ -10,17 +10,17 @@ class GoogleButton extends StatefulWidget {
 }
 
 class _GoogleButtonState extends State<GoogleButton> {
-  SocialButton _socialButton = new SocialButton();
+  static const _BackgroundColor = Color(0xFFF8F7F7);
+  static const _TextColor = Color(0xFF575657);
 
   @override
   Widget build(BuildContext context) {
-    _socialButton.text = "Login com Google";
-    _socialButton.color = Color(0xFFF8F7F7);
-    _socialButton.textColor = Color(0xFF575657);
-    _socialButton.icon =
-        Image(image: AssetImage("assets/google_logo.png"), height: 15.0);
-    _socialButton.onPressed = widget.onPressed;
-
-    return _socialButton;
+    return new SocialButton(
+      text: "Login com Google",
+      color: _BackgroundColor,
+      textColor: _TextColor,
+      icon: Image(image: AssetImage("assets/google_logo.png"), height: 15.0),
+      onPressed: widget.onPressed,
+    );
   }
 }

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 
 class SocialButton extends StatefulWidget {
-  Function onPressed;
-  Image icon;
-  String text;
-  Color color;
-  Color textColor;
+  final Function onPressed;
+  final Image icon;
+  final String text;
+  final Color color;
+  final Color textColor;
+
+  SocialButton(
+      {this.onPressed, this.icon, this.text, this.color, this.textColor});
 
   @override
   _SocialButtonState createState() => _SocialButtonState();
