@@ -12,7 +12,7 @@ enum SELECTED_MENU {
 }
 
 class MenuDrawer extends StatefulWidget {
-  SELECTED_MENU selected;
+  final SELECTED_MENU selected;
   MenuDrawer({Key key, this.selected}) : super(key: key);
 
   @override
