@@ -232,10 +232,10 @@ class _AddCardViewState extends State<AddCardView> {
                         DateTime(card.expYear + 2000, card.expMonth + 1)
                             .subtract(Duration(days: 1));
 
-                    print(expDate);
-
                     if (expDate.isBefore(date))
                       return "Tem de introduzir uma data de expiração posterior ao dia de hoje.";
+
+                    return null;
                   },
                   decoration: InputDecoration(
                     labelText: "Data de Vencimento",
