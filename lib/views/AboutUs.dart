@@ -9,7 +9,7 @@ class AboutUs extends StatelessWidget {
     _scaffoldKey.currentState.openDrawer();
   }
 
-  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {

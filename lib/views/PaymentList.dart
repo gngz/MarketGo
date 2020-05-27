@@ -9,8 +9,8 @@ import 'package:marketgo/services/CardService.dart';
 import 'package:marketgo/views/AddCard.dart';
 
 class PaymentList extends StatefulWidget {
-  ListModel list;
-  List<Product> products;
+  final ListModel list;
+  final List<Product> products;
   PaymentList({this.list, this.products});
   @override
   _PaymentListState createState() => _PaymentListState();

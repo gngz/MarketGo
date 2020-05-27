@@ -10,7 +10,7 @@ import 'package:marketgo/models/Product.dart';
 import 'package:marketgo/services/ProductService.dart';
 
 class CategoryList extends StatefulWidget {
-  ListModel list;
+  final ListModel list;
 
   CategoryList({this.list});
   @override

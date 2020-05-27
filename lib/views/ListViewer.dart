@@ -9,7 +9,7 @@ import 'package:marketgo/views/PaymentList.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 class ListViewer extends StatefulWidget {
-  ListModel list;
+  final ListModel list;
 
   ListViewer({this.list});
 
