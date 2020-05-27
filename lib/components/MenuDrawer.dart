@@ -79,8 +79,8 @@ class _MenuDrawerState extends State<MenuDrawer> {
           },
         ),
         ListTile(
-          leading: FaIcon(FontAwesomeIcons.receipt),
-          title: Text("Pagamentos"),
+          leading: FaIcon(FontAwesomeIcons.fileInvoice),
+          title: Text("Histórico Pagamentos"),
           selected: widget.selected == SELECTED_MENU.PAYMENTS,
           onTap: () {
             if (_checkCurrent(context, SELECTED_MENU.PAYMENTS)) return;
