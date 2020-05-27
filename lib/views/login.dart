@@ -57,7 +57,7 @@ class _LoginViewState extends State<LoginView> {
   _facebookHandler() async {
     facebookLogin.loginBehavior = FacebookLoginBehavior.nativeWithFallback;
     try {
-      final result = await facebookLogin.logInWithReadPermissions(['email']);
+      final result = await facebookLogin.logIn(['email']);
       _showLoadingDialog();
       await Auth.autenticateSocial(
           SocialProvider.FACEBOOK, result.accessToken.token);

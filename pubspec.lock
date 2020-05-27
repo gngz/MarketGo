@@ -86,17 +86,19 @@ packages:
   flutter_barcode_scanner:
     dependency: "direct main"
     description:
-      name: flutter_barcode_scanner
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.1"
+      path: "."
+      ref: HEAD
+      resolved-ref: adafb548091da416b72e501026337c9cff7ca02a
+      url: "https://github.com/knaeckeKami/flutter_barcode_scanner.git"
+    source: git
+    version: "1.0.0"
   flutter_facebook_login:
     dependency: "direct main"
     description:
       name: flutter_facebook_login
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.2.0"
+    version: "3.0.0"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -134,21 +136,21 @@ packages:
       name: google_sign_in
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.4.4"
+    version: "4.5.1"
   google_sign_in_platform_interface:
     dependency: transitive
     description:
       name: google_sign_in_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.1"
+    version: "1.1.2"
   google_sign_in_web:
     dependency: transitive
     description:
       name: google_sign_in_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.9.1"
+    version: "0.9.1+1"
   http_parser:
     dependency: transitive
     description:
