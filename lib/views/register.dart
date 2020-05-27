@@ -133,12 +133,15 @@ class _RegisterViewState extends State<RegisterView> {
       registerDTO.email = _email;
       registerDTO.password = _password;
       try {
-        await Auth.register(registerDTO);
+        var response = await Auth.register(registerDTO);
+        _goListView();
       } on RegisterException catch (e) {
         if (e.validation == Validation.unique) {
           _showSnackBar("Já existe um utilizador com este email");
         }
-      } catch (e) {}
+      } catch (e) {
+        print(e);
+      }
     }
   }
 
@@ -150,6 +153,14 @@ class _RegisterViewState extends State<RegisterView> {
           textColor: Colors.cyan,
         ),
         content: Text(text)));
+  }
+
+  _goListView() {
+    if (Navigator.canPop(context)) {
+      Navigator.pushReplacementNamed(context, "/lists");
+      return;
+    }
+    Navigator.pushNamed(context, "/lists");
   }
 
   @override
