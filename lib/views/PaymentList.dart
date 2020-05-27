@@ -6,6 +6,7 @@ import 'package:marketgo/models/ListModel.dart';
 import 'package:marketgo/models/Product.dart';
 import 'package:marketgo/services/PaymentsService.dart';
 import 'package:marketgo/views/AddCard.dart';
+import 'package:marketgo/views/MyLists.dart';
 
 class PaymentList extends StatefulWidget {
   final ListModel list;
@@ -52,6 +53,34 @@ class _PaymentListState extends State<PaymentList> {
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
+  Widget _checkDialog() {
+    return AlertDialog(
+      title: const Text("Pagamento"),
+      content:
+          const Text("Tem a certeza que deseja usar este cartão de pagamento?"),
+      actions: <Widget>[
+        FlatButton(
+            onPressed: () {
+              Navigator.of(context).pop(true);
+            },
+            child: Text("Usar este cartão")),
+        FlatButton(
+          onPressed: () {
+            Navigator.of(context).pop(false);
+          },
+          child: Text("Cancelar"),
+        )
+      ],
+    );
+  }
+
+  Future<bool> _showCheckDialog() async {
+    var result = await showDialog(
+        context: context, builder: (context) => _checkDialog());
+
+    return result != null ? result : false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,8 +118,10 @@ class _PaymentListState extends State<PaymentList> {
                   title: Text(card.cardHolder),
                   subtitle: Text("*${card.lastFour}"),
                   trailing: Icon(Icons.chevron_right),
-                  onTap: () {
-                    _doPayment(card);
+                  onTap: () async {
+                    if (await _showCheckDialog()) {
+                      _doPayment(card);
+                    }
                   },
                 ));
               });
@@ -107,6 +138,7 @@ class _PaymentListState extends State<PaymentList> {
 
   List<String> getScannedProductsEan() {
     List<String> list = new List();
+
     for (var product in this.widget.products) {
       if (product.readed) list.add(product.ean);
     }
@@ -116,9 +148,53 @@ class _PaymentListState extends State<PaymentList> {
   Future<void> _doPayment(CardModel cardId) async {
     var listId = this.widget.list.id;
     var eanList = getScannedProductsEan();
-    if (await PaymentsService().pay(eanList, cardId.id, listId))
-      print("Pagameneto bem succediod");
-    else
-      print("FOi-se");
+
+    _showLoadingDialog();
+    if (await PaymentsService().pay(eanList, cardId.id, listId)) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => MyListsView(
+            snackbar: SnackBar(
+              content: Text("Pagamento efetuado com sucesso. Obrigado!"),
+              action: SnackBarAction(
+                label: "Ok",
+                onPressed: () {},
+              ),
+            ),
+          ),
+        ),
+      );
+    } else {
+      Navigator.of(context).pop();
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text("Pagamento não sucedido"),
+          content: Text(
+            "Ocorreu um erro a processar o pagamento com este cartão.\nTente com outro cartão.",
+          ),
+          actions: <Widget>[
+            FlatButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("Ok"),
+            )
+          ],
+        ),
+      );
+    }
+  }
+
+  void _showLoadingDialog() {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
   }
 }
