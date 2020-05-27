@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:marketgo/bloc/CardsBloc.dart';
-import 'package:marketgo/components/MenuDrawer.dart';
 import 'package:marketgo/models/CardModel.dart';
 import 'package:marketgo/models/ListModel.dart';
 import 'package:marketgo/models/Product.dart';
-import 'package:marketgo/services/CardService.dart';
+import 'package:marketgo/services/PaymentsService.dart';
 import 'package:marketgo/views/AddCard.dart';
 
 class PaymentList extends StatefulWidget {
@@ -97,13 +96,9 @@ class _PaymentListState extends State<PaymentList> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      drawer: MenuDrawer(
-        selected: SELECTED_MENU.CARDS,
-      ),
       appBar: AppBar(
         backgroundColor: ColorDarkBlue,
-        automaticallyImplyLeading: false,
-        title: Text("Cartões de Pagamento"),
+        title: Text("Escolha o cartão de pagamento"),
       ),
       body: StreamBuilder<List<CardModel>>(
         stream: CardsBloc().stream,
@@ -159,25 +154,7 @@ class _PaymentListState extends State<PaymentList> {
         tooltip: "Adicionar Cartão",
         child: Icon(Icons.add),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      bottomNavigationBar: BottomAppBar(
-          shape: const CircularNotchedRectangle(),
-          color: ColorDarkBlue,
-          child: Row(
-            children: <Widget>[
-              IconButton(
-                color: Colors.white,
-                icon: Icon(Icons.menu),
-                tooltip: "Menu",
-                onPressed: () => {_openDrawer()},
-              )
-            ],
-          )),
     );
-  }
-
-  _openDrawer() {
-    _scaffoldKey.currentState.openDrawer();
   }
 
   List<String> getScannedProductsEan() {
@@ -191,7 +168,7 @@ class _PaymentListState extends State<PaymentList> {
   Future<void> _doPayment(CardModel cardId) async {
     var listId = this.widget.list.id;
     var eanList = getScannedProductsEan();
-    if (await CardService().pay(eanList, cardId.id, listId))
+    if (await PaymentsService().pay(eanList, cardId.id, listId))
       print("Pagameneto bem succediod");
     else
       print("FOi-se");
