@@ -76,6 +76,8 @@ class Auth {
       throw new RegisterException(
           RegisterException.getValidation(regResponse.validation),
           regResponse.field);
+    } else {
+      _storeData(UserDTO(token: regResponse.token, user: regResponse.user));
     }
   }
 }
