@@ -5,6 +5,7 @@ import 'package:marketgo/models/ListModel.dart';
 import 'package:marketgo/models/Product.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:marketgo/views/CategoryList.dart';
+import 'package:marketgo/views/PaymentList.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 class ListViewer extends StatefulWidget {
@@ -189,6 +190,9 @@ class _ListViewerState extends State<ListViewer> {
 
   //return NumberPicker.integer(initialValue: 1, minValue: 1, maxValue: 100, onChanged: () => {});
   double _calculateTotal(List<Product> productList) {
+    if (isShopMode)
+      return getScannedProducts().fold(
+          0.00, (value, element) => value + (element.price * element.quantity));
     return productList.fold(
         0.00, (value, element) => value + (element.price * element.quantity));
   }
@@ -286,5 +290,23 @@ class _ListViewerState extends State<ListViewer> {
     return false;
   }
 
-  void _doPayment() {}
+  List<Product> getScannedProducts() {
+    List<Product> list = new List();
+    for (var product in ProductsBloc().product) {
+      if (product.readed) list.add(product);
+    }
+    return list;
+  }
+
+  void _doPayment() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PaymentList(
+          products: getScannedProducts(),
+          list: this.widget.list,
+        ),
+      ),
+    );
+  }
 }

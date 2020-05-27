@@ -4,11 +4,15 @@ import 'package:marketgo/bloc/CardsBloc.dart';
 import 'package:marketgo/components/MenuDrawer.dart';
 import 'package:marketgo/models/CardModel.dart';
 import 'package:marketgo/models/ListModel.dart';
+import 'package:marketgo/models/Product.dart';
+import 'package:marketgo/services/ApiService.dart';
+import 'package:marketgo/services/CardService.dart';
 import 'package:marketgo/views/AddCard.dart';
 
 class PaymentList extends StatefulWidget {
   ListModel list;
-  PaymentList({this.list});
+  List<Product> products;
+  PaymentList({this.list, this.products});
   @override
   _PaymentListState createState() => _PaymentListState();
 }
@@ -143,7 +147,7 @@ class _PaymentListState extends State<PaymentList> {
                     subtitle: Text("*${card.lastFour}"),
                     trailing: Icon(Icons.chevron_right),
                     onTap: () {
-                      _doPayment();
+                      _doPayment(card);
                     },
                   )),
                 );
@@ -177,8 +181,20 @@ class _PaymentListState extends State<PaymentList> {
     _scaffoldKey.currentState.openDrawer();
   }
 
-  void _doPayment() {
+  List<String> getScannedProductsEan() {
+    List<String> list = new List();
+    for (var product in this.widget.products) {
+      if (product.readed) list.add(product.ean);
+    }
+    return list;
+  }
+
+  Future<void> _doPayment(CardModel cardId) async {
     var listId = this.widget.list.id;
-    listId;
+    var eanList = getScannedProductsEan();
+    if (await CardService().pay(eanList, cardId.id, listId))
+      print("Pagameneto bem succediod");
+    else
+      print("FOi-se");
   }
 }
