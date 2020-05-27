@@ -14,8 +14,8 @@ class RegisterResponse {
         message: json["message"],
         field: json["field"],
         validation: json['validation'],
-        user: User.fromJson(json['user']),
-        token: json['token']);
+        user: json['user'] != null ? User.fromJson(json['user']) : null,
+        token: json['token'] != null ? json['token'] : null);
     return regres;
   }
 }
