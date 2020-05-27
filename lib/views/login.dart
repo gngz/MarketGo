@@ -25,13 +25,14 @@ class _LoginViewState extends State<LoginView> {
   String password;
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
-  _LoginViewState() {
+  @override
+  void initState() {
+    super.initState();
     _checkLogin();
   }
 
   _checkLogin() async {
     try {
-      _showLoadingDialog();
       UserDTO userData = await Auth.getUser();
       if (userData.user.email != null) {
         UserBloc().setUser(userData);
@@ -41,13 +42,16 @@ class _LoginViewState extends State<LoginView> {
     } catch (e) {
       print(e);
       _showSnackBar("Ocorreu um erro ao iniciar sessão!");
-      Navigator.pop(context);
+      //Navigator.pop(context);
     }
-    Navigator.pop(context);
   }
 
   _goListView() {
-    Navigator.pushReplacementNamed(context, "/lists");
+    if (Navigator.canPop(context)) {
+      Navigator.pushReplacementNamed(context, "/lists");
+      return;
+    }
+    Navigator.pushNamed(context, "/lists");
   }
 
   _facebookHandler() async {
@@ -256,7 +260,7 @@ class _LoginViewState extends State<LoginView> {
   }
 
   void _showSnackBar(String text) {
-    _scaffoldKey.currentState.showSnackBar(new SnackBar(
+    _scaffoldKey.currentState?.showSnackBar(new SnackBar(
         action: new SnackBarAction(
           label: "OK",
           onPressed: () => {},
