@@ -67,7 +67,7 @@ class Auth {
     await _storeData(userData);
   }
 
-  static void register(RegisterRequest registerDto) async {
+  static Future<void> register(RegisterRequest registerDto) async {
     var response = await ApiService()
         .getHttp()
         .post("/auth/register", data: registerDto.toJson());

@@ -124,7 +124,7 @@ class _RegisterViewState extends State<RegisterView> {
     return null;
   }
 
-  void _registerHandler() async {
+  Future<void> _registerHandler() async {
     if (_formKey.currentState.validate()) {
       var registerDTO = new RegisterRequest();
 
