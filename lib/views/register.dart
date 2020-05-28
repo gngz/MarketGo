@@ -135,7 +135,7 @@ class _RegisterViewState extends State<RegisterView> {
       _showLoadingDialog();
 
       try {
-        var response = await Auth.register(registerDTO);
+        await Auth.register(registerDTO);
         Navigator.pop(context);
         _goListView();
       } on RegisterException catch (e) {
