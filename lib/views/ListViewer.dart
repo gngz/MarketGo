@@ -116,8 +116,28 @@ class _ListViewerState extends State<ListViewer> {
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text("Quantidade: ${product.quantity}"),
-          Text("Preço Unitário: ${product.price.toStringAsFixed(2)}€"),
+          Row(
+            children: <Widget>[
+              FaIcon(FontAwesomeIcons.sort, size: 15, color: Colors.grey),
+              Text("  Quantidade: ${product.quantity}"),
+            ],
+          ),
+          Row(
+            children: <Widget>[
+              Icon(Icons.euro_symbol, size: 15, color: Colors.grey),
+              Text(" ${product.price.toStringAsFixed(2)}"),
+            ],
+          ),
+          Row(
+            children: <Widget>[
+              FaIcon(
+                FontAwesomeIcons.compass,
+                size: 15,
+                color: Colors.grey,
+              ),
+              Text("  Corredor ${product.location}"),
+            ],
+          ),
         ],
       ),
       onTap: () async {
