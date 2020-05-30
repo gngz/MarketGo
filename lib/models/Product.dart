@@ -5,6 +5,7 @@ class Product {
   double price;
   String image;
   int quantity;
+  String location;
   bool readed = false;
 
   Product({
@@ -14,6 +15,7 @@ class Product {
     this.price,
     this.image,
     this.quantity,
+    this.location,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
@@ -23,6 +25,7 @@ class Product {
       description: json["description"],
       price: json["price"].toDouble(),
       image: json["image"],
+      location: json["location"],
       quantity: json["pivot"] == null ? null : json["pivot"]["quantity"] as int,
     );
 
