@@ -24,7 +24,6 @@ class _MyListsViewState extends State<MyListsView> {
 
     if (widget.snackbar != null) {
       new Future<void>.delayed(Duration.zero, () {
-        print("EXECUTANDO SNACABARE");
         _scaffoldKey.currentState.showSnackBar(widget.snackbar);
       });
     }

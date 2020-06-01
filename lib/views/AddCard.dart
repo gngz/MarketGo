@@ -256,13 +256,9 @@ class _AddCardViewState extends State<AddCardView> {
                     labelText: "Data de Vencimento",
                   ),
                   onChanged: (value) {
-                    print(value);
-
                     var splited = value.split("/");
 
                     if (splited.length > 1) {
-                      print("contains!! ${splited[0]}");
-                      print(splited);
                       var month = splited[0];
                       var year = splited[1];
                       setState(() {
@@ -290,7 +286,6 @@ class _AddCardViewState extends State<AddCardView> {
                   return null;
                 },
                 onChanged: (value) {
-                  print(value);
                   setState(() {
                     card.cvc = value as int;
                   });

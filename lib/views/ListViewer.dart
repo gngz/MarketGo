@@ -236,8 +236,6 @@ class _ListViewerState extends State<ListViewer> {
             String barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
                 "#FF0000", "Cancelar", false, ScanMode.BARCODE);
 
-            print("BARCODE: $barcodeScanRes");
-
             if (barcodeScanRes != "-1") {
               try {
                 if (await ProductsBloc()

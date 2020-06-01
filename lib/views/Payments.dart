@@ -110,7 +110,6 @@ class _PaymentsState extends State<Payments> {
 
             return ListView.separated(
               itemBuilder: (context, index) {
-                print("Building index $index");
                 if (index < transactions.length) {
                   var transaction = transactions[index];
                   return ListTile(

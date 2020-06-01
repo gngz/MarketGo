@@ -14,7 +14,6 @@ class ListService {
 
   Future<List<ListModel>> getUserLists() async {
     var response = await ApiService().getAuthHttp().get("/list");
-    print(response);
     List<ListModel> list;
     try {
       list = ListModel.fromList(response.data);
