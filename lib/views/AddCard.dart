@@ -163,11 +163,24 @@ class _AddCardViewState extends State<AddCardView> {
         ));
   }
 
+  void _showSnackBar(String text) {
+    _scaffoldKey.currentState.showSnackBar(new SnackBar(
+        action: new SnackBarAction(
+          label: "OK",
+          onPressed: () => {},
+          textColor: Colors.cyan,
+        ),
+        content: Text(text)));
+  }
+
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text("Adicionar Cartão"),
         backgroundColor: ColorDarkBlue,
@@ -226,6 +239,8 @@ class _AddCardViewState extends State<AddCardView> {
                   validator: (value) {
                     if (value.isEmpty)
                       return "Tem de introduzir uma data de expiração.";
+
+                    if (card.expMonth > 12) return "Mês de expiração inválido.";
 
                     var date = DateTime.now();
                     var expDate =
@@ -295,6 +310,8 @@ class _AddCardViewState extends State<AddCardView> {
               if (await CardsBloc().addCard(card)) {
                 _formKey.currentState.reset();
                 Navigator.pop(context);
+              } else {
+                _showSnackBar("Cartão Inválido! Tente novamente.");
               }
             }
           },
